@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>宇宙のOSを書き換えた天才たち｜超・体験講義</title>
+<style>
+  :root{
+    --bg:#04050e; --panel:#0c1024; --panel2:#141833;
+    --line:#272d55; --txt:#e9ecff; --muted:#99a2d6;
+    --accent:#5fd6ff; --accent2:#ffd166; --pink:#ff7eb6; --green:#7CFFB2; --purple:#b58bff;
+    --shadow:0 14px 50px rgba(0,0,0,.55);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--txt);
+    font-family:-apple-system,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.7;}
+  a{color:var(--accent)}
+  #stars{position:fixed;inset:0;z-index:-2}
+  body::before{content:"";position:fixed;inset:0;z-index:-1;
+    background:radial-gradient(1200px 600px at 72% -10%,rgba(95,214,255,.10),transparent 60%),
+               radial-gradient(900px 500px at 8% 110%,rgba(181,139,255,.12),transparent 60%);}
+
+  header.top{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+    background:rgba(4,5,14,.75);border-bottom:1px solid var(--line);}
+  .top-inner{max-width:1180px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:14px;}
+  .brand{font-weight:800;letter-spacing:.4px;font-size:15px;white-space:nowrap}
+  .brand small{color:var(--muted);font-weight:500}
+  .progressbar{flex:1;height:8px;background:#171c3a;border-radius:99px;overflow:hidden;min-width:60px}
+  .progressbar>i{display:block;height:100%;width:6.6%;
+    background:linear-gradient(90deg,var(--accent),var(--pink));transition:width .4s}
+  .chip{font-size:12px;color:var(--muted);white-space:nowrap}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+
+  .hero{text-align:center;padding:60px 18px 26px}
+  .hero h1{font-size:clamp(26px,5vw,48px);margin:.2em 0;line-height:1.22;
+    background:linear-gradient(90deg,#fff,var(--accent) 55%,var(--pink));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p{color:var(--muted);max-width:640px;margin:14px auto;font-size:16px}
+  .hero .meta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+  .tag{border:1px solid var(--line);background:var(--panel);padding:6px 12px;border-radius:99px;font-size:13px;color:var(--muted)}
+
+  .index{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin:24px 0 60px}
+  .idx-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;transition:.2s}
+  .idx-card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:var(--shadow)}
+  .idx-card .num{font-size:12px;color:var(--accent2);font-weight:700}
+  .idx-card .t{font-weight:700;margin-top:4px}
+  .idx-card .d{font-size:12.5px;color:var(--muted);margin-top:6px}
+
+  .chapter{display:none;padding:24px 0 80px;animation:fade .45s}
+  .chapter.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .ch-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .ch-head .n{font-size:14px;color:var(--accent2);font-weight:800;letter-spacing:1px}
+  .ch-head h2{font-size:clamp(22px,4vw,32px);margin:6px 0}
+  .who{display:inline-flex;gap:8px;align-items:center;background:var(--panel2);
+    border:1px solid var(--line);border-radius:99px;padding:5px 12px;font-size:13px;color:var(--muted)}
+  .who b{color:var(--txt)}
+
+  .grid{display:grid;grid-template-columns:0.85fr 1.15fr;gap:20px;margin-top:18px}
+  @media(max-width:960px){.grid{grid-template-columns:1fr}}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
+  .card h3{margin:.1em 0 .5em;font-size:16px;display:flex;align-items:center;gap:8px}
+  .card h3 .dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+  .story p{margin:.6em 0;font-size:15px}
+  .story .lead{color:var(--accent);font-weight:600}
+  .quote{border-left:3px solid var(--pink);padding:6px 0 6px 14px;color:#ffd9ec;font-style:italic;margin:14px 0}
+  .keypoint{background:linear-gradient(180deg,rgba(124,255,178,.08),transparent);
+    border:1px solid rgba(124,255,178,.3);border-radius:12px;padding:12px 14px;margin-top:14px;font-size:14px}
+  .keypoint b{color:var(--green)}
+
+  .sim h3 .dot{background:var(--pink)}
+  .stage{position:relative;width:100%;aspect-ratio:16/9;background:#03040c;border-radius:12px;
+    border:1px solid var(--line);overflow:hidden;cursor:crosshair}
+  .stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+  .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+  .controls label{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:4px;min-width:140px;flex:1}
+  .controls input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer}
+  .controls .val{color:var(--accent);font-weight:700}
+  button.btn{background:linear-gradient(90deg,var(--accent),#4aa8ff);color:#04111a;border:none;
+    padding:9px 15px;border-radius:10px;font-weight:800;cursor:pointer;font-size:14px;transition:.15s}
+  button.btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
+  button.btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
+  button.btn.ghost:hover{border-color:var(--accent)}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:10px}
+  .readout{font-size:13px;color:var(--accent2);margin-top:8px;font-variant-numeric:tabular-nums;min-height:1.2em}
+  .stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .stat{background:#0f1432;border:1px solid var(--line);border-radius:9px;padding:6px 11px;font-size:12px;display:flex;gap:7px;align-items:baseline}
+  .stat .sl{color:var(--muted)}
+  .stat .sv{color:var(--accent);font-weight:800;font-variant-numeric:tabular-nums}
+  .toggle{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+  .toggle button{background:var(--panel2);border:none;color:var(--muted);padding:8px 13px;cursor:pointer;font-size:13px}
+  .toggle button.on{background:var(--accent);color:#04111a;font-weight:800}
+
+  .chnav{display:flex;justify-content:space-between;gap:10px;margin-top:30px}
+  .chnav button{flex:1;background:var(--panel);border:1px solid var(--line);color:var(--txt);
+    padding:14px;border-radius:12px;cursor:pointer;text-align:left;transition:.2s}
+  .chnav button:hover:not(:disabled){border-color:var(--accent);background:var(--panel2)}
+  .chnav button:disabled{opacity:.3;cursor:not-allowed}
+  .chnav .lab{font-size:11px;color:var(--muted)}
+  .chnav .ttl{font-weight:700;font-size:14px}
+  .chnav .next{text-align:right}
+  .backtop{display:inline-block;margin-top:10px;color:var(--muted);cursor:pointer;font-size:13px}
+  .backtop:hover{color:var(--accent)}
+  footer{border-top:1px solid var(--line);color:var(--muted);text-align:center;padding:30px 18px;font-size:13px}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">🪐 宇宙のOS <small>— 体験講義</small></div>
+    <div class="progressbar"><i id="pbar"></i></div>
+    <div class="chip" id="pchip">第1章 / 全15章</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="home">
+    <div class="hero">
+      <h1>宇宙のOSを書き換えた<br>天才たちの物語</h1>
+      <p>138億年の宇宙の歴史と、それを解き明かしてきた天才たちの歩みを、全15章で「体験」しよう。各章のシミュレーターは、本物の物理法則でリアルタイムに動いている。自分で動かして、宇宙のルールを確かめよう。</p>
+      <div class="meta">
+        <span class="tag">⏱ 全15章</span>
+        <span class="tag">🎮 本格物理シミュレーター搭載</span>
+        <span class="tag">🎓 中学生〜の自主学習に</span>
+      </div>
+    </div>
+    <div class="index" id="indexGrid"></div>
+  </section>
+  <div id="chapters"></div>
+</main>
+
+<footer>作って動かす科学史 ©体験講義 ／ すべての物理計算はあなたのブラウザ内でリアルタイムに行われています。</footer>
+
+<script>
+/* =========================================================================
+   章データ
+   ========================================================================= */
+const CH=[
+{n:1,t:"物理学は「世界のルール探し」だ",who:"アイザック・ニュートン",role:"万有引力の発見者",sim:"gravity",
+ lead:"科学とは、宇宙というゲームのルールブックを読み解く冒険だ。",
+ body:[
+  "サッカーには「手を使ってはいけない」というルールがある。それを知らなければ試合は理解できない。宇宙にも同じように<b>絶対のルール</b>がある。それを探すのが物理学だ。",
+  "ニュートンは気づいた。地面に落ちる<b>リンゴ</b>と、空に浮かぶ<b>月</b>。この二つはまったく別物に見えるが、じつは<span class='lead'>同じ「重力」という一つの法則</span>に従っているだけだと。月もまた、リンゴと同じように「地球に向かって落ち続けている」。ただ、横にも速く動いているから、地球を回り続けるのだ。",
+  "この法則の精度はすさまじく、計算だけで未知の惑星<b>「海王星」</b>の位置を言い当て、本当にそこから発見されたほどだった。"
+ ],
+ quote:"自然は、単純さを好む。",
+ key:"<b>万有引力</b>がわかると、リンゴの落下も惑星の軌道も同じ式で説明でき、未来の位置すら予言できる。",
+ simTitle:"重力で遊ぶ：軌道を作れ／的を撃て",
+ simHint:"🎯的当てモードは左下の大砲が発射地点。撃ちたい方向へドラッグして離すと発射（長く引くほど強い）。点線の予測軌道を見ながら岩を狙おう。🛰軌道モードでは惑星の横をドラッグし、横向きの速さを調整して人工衛星を周回させよう。速すぎると脱出、遅すぎると落下する。"},
+
+{n:2,t:"ルネサンスの万能天才：ダ・ヴィンチと解剖学",who:"レオナルド・ダ・ヴィンチ",role:"観察の先駆者",sim:"davinci",
+ lead:"すべての発見は「よく見ること」から始まる。",
+ body:[
+  "ダ・ヴィンチは、誰にも盗み読まれないように手稿をすべて<b>「鏡文字」</b>で書いた。鏡に映すと、はじめて文字が読める。",
+  "そのノートには、絵画だけでなく、<b>世界初の動脈硬化の記録</b>や、心臓の血流、鳥の羽ばたきの仕組みまで、徹底した観察に基づくスケッチが並んでいた。",
+  "彼は<span class='lead'>「実際に見て、描いて、確かめる」</span>という科学の基本姿勢を、誰よりも早く実践した先駆者だった。"
+ ],
+ quote:"経験こそ、すべての確かさの母である。",
+ key:"理論の前に、まず<b>観察</b>。世界をありのままに見る目が、科学のスタート地点だ。",
+ simTitle:"鏡文字スタジオ＆動く解剖図",
+ simHint:"文字を打つと鏡文字に変換（スマホのカメラを鏡にして読める）。右では心臓が鼓動し血液が流れ、鳥の翼が羽ばたく。スライダーで心拍と羽ばたきの速さを変えられる。"},
+
+{n:3,t:"ガリレイが見つけた「相対性」の種",who:"ガリレオ・ガリレイ",role:"近代科学の父",sim:"galileo",
+ lead:"動いていても、物理のルールは変わらない。",
+ body:[
+  "ガリレイは考えた。「<b>等速でまっすぐ進む船</b>の中では、止まっている時とまったく同じように水滴が真下に落ちる」。",
+  "つまり、窓を閉めた船の中だけを見ていても、自分が動いているのか止まっているのか<span class='lead'>区別できない</span>。これが<b>ガリレイの相対性原理</b>だ。",
+  "この何気ない気づきの「種」が、300年後にアインシュタインの相対性理論として大きく花開く。"
+ ],
+ quote:"それでも地球は動いている。",
+ key:"<b>等速運動</b>する乗り物の中では、外と同じ物理法則が成り立つ。運動は「相対的」だ。",
+ simTitle:"二つの視点を同時に見る",
+ simHint:"上＝外（地上）の視点、下＝車内の視点を同時表示。発射すると、車内ではボールは真上→真下なのに、外から見ると山なりの放物線。同じ現象が視点で違って見える。"},
+
+{n:4,t:"熱力学と産業革命：蒸気機関が変えた世界",who:"ルートヴィッヒ・ボルツマン",role:"統計力学の開拓者",sim:"thermo",
+ lead:"「熱」の正体は、目に見えない粒のダンスだった。",
+ body:[
+  "蒸気機関が世界を動かした産業革命。その裏で、ボルツマンは熱の正体を見抜いた。<span class='lead'>熱とは、無数の小さな粒（分子）のガチャガチャした運動</span>そのものだ、と。",
+  "面白いことに、最初は全員が同じ速さでも、ぶつかり合ううちに、速い粒・遅い粒が自然に生まれ、ある決まった<b>速度の分布（マクスウェル・ボルツマン分布）</b>に落ち着く。",
+  "しかし当時、原子や分子は「目に見えない＝信じられない」と猛烈に批判された。理解されないまま、ボルツマンは<b>失意のうちに自ら命を絶ってしまう</b>。彼の墓には、後に正しさが証明された式 <i>S = k log W</i> が刻まれている。"
+ ],
+ quote:"S = k log W （ボルツマンの墓碑に刻まれた式）",
+ key:"温度とは<b>分子の運動の激しさ</b>。衝突を重ねると、速さは自然に決まった分布に落ち着く。",
+ simTitle:"分子運動シミュレーター＋速度分布グラフ",
+ simHint:"粒子は実際に互いに衝突している。温度を上げると激しくなり、右下のグラフに「速度の分布」がリアルタイムで形成される。気圧計（壁への衝突回数）も連動する。"},
+
+{n:5,t:"マクスウェルの「光」というバグ",who:"ジェームズ・クラーク・マクスウェル",role:"電磁気学の完成者",sim:"maxwell",
+ lead:"電気と磁気を一つの式にまとめたら、「光」が飛び出した。",
+ body:[
+  "電気の力と磁気の力。別々に見えるこの二つを、マクスウェルはたった4本の式にまとめあげた。",
+  "するとその式から、<span class='lead'>電場と磁場が直角に組み合わさって進む波</span>が現れ、その速さを計算すると――<b>秒速約30万km（光の速さ）</b>になった。光の正体は電磁波だったのだ。",
+  "周波数を変えると、電波・赤外線・可視光・X線・ガンマ線…と姿を変える。すべて同じ「電磁波」の仲間だ。そしてこの式は「光速は<b>誰から見ても一定</b>」と告げ、これが科学史最大の「バグ」となってアインシュタインへ繋がる。"
+ ],
+ quote:"そして、光あれ。― マクスウェル方程式は静かにそう告げた。",
+ key:"電場＋磁場＝<b>光（電磁波）</b>。周波数の違いが電波〜ガンマ線の違い。光速は誰から見ても一定。",
+ simTitle:"電磁波ジェネレーター（電波→ガンマ線）",
+ simHint:"アンテナ上の電荷が振動し、電場（赤）と磁場（青）が直角に組み合わさった電磁波を放つ。周波数スライダーで電磁スペクトルの上を移動――色と名前が変わる。"},
+
+{n:6,t:"アインシュタインの衝撃：時間は伸び縮みする",who:"アルベルト・アインシュタイン",role:"特殊相対性理論（1905年）",sim:"special",
+ lead:"光が絶対なら、伸び縮みするのは「時間」のほうだ。",
+ body:[
+  "1905年、特許局の職員だった26歳のアインシュタインが世界を変えた。彼はマクスウェルの「バグ」を、バグではなく<b>新しいルール</b>として受け入れた。",
+  "「光の速さが誰から見ても一定なら、つじつまを合わせるために<span class='lead'>時間と空間のほうが伸び縮みしている</span>はずだ」。猛スピードで動く時計では、光が斜めに長い道を進む分、<b>時間がゆっくり</b>になる。さらに進行方向の長さは<b>縮む</b>。",
+  "これが有名な<b>双子のパラドックス</b>だ。光速近くで宇宙旅行をして帰ってくると、地球で待っていた双子のきょうだいより、自分のほうが若いまま――SFではなく、実際に起きる本当の話だ。"
+ ],
+ quote:"時間とは、それぞれの人が持つ「自分だけの時計」である。",
+ key:"速く動くほど<b>時間はゆっくり進み、長さは縮む</b>。絶対なのは光速だけ。",
+ simTitle:"双子のパラドックス・ダッシュボード",
+ simHint:"宇宙船の速さを上げると、光時計の光が斜めに伸び、地球の双子と宇宙船の双子の年齢差がリアルタイムで開いていく。宇宙船は進行方向に縮んで（ローレンツ収縮）見える。"},
+
+{n:7,t:"重力は「空間のゆがみ」だった：一般相対性理論",who:"アルベルト・アインシュタイン",role:"一般相対性理論",sim:"general",
+ lead:"重力とは「引く力」ではなく、空間そのもののへこみだった。",
+ body:[
+  "ニュートンは重力を「物どうしが引き合う力」と考えた。アインシュタインはこれを<span class='lead'>まるごと書き換えた</span>。",
+  "太陽のような重い星は、まわりの<b>時空をグニャッとへこませる</b>。地球はそのへこみに沿って転がっているだけ。光さえもこの坂で曲がる――これが<b>重力レンズ</b>だ。",
+  "質量を極限まで増やすと、光すら逃げ出せない<b>ブラックホール</b>が生まれる。そして星が突然消えれば、へこみが元に戻る「さざ波（<b>重力波</b>）」が光速で伝わる。2015年、それが本当に観測された。"
+ ],
+ quote:"物質は空間に「曲がり方」を教え、空間は物質に「進み方」を教える。",
+ key:"重力＝<b>時空のゆがみ</b>。光も曲がり（重力レンズ）、究極のへこみが<b>ブラックホール</b>。",
+ simTitle:"時空のゆがみ＋光の曲がり＋ブラックホール",
+ simHint:"中心の質量を変えると格子（時空）のへこみが変化。左から飛ぶ光線が重力で曲がる（重力レンズ）。質量を最大にすると事象の地平面が現れ、光も飲み込まれる。"},
+
+{n:8,t:"量子力学の誕生：世界は「トビトビ」でできている",who:"マックス・プランク",role:"量子論の父（1900年）",sim:"quantum",
+ lead:"エネルギーは坂道ではなく、階段だった。",
+ body:[
+  "1900年、プランクは熱い物体が出す光を説明しようと悪戦苦闘していた。どうしても計算が合わない。",
+  "そこで彼は仮定した。エネルギーは水のように<b>なめらかに連続している</b>のではなく、硬貨のように<span class='lead'>「これ以上分けられない最小単位（量子）」</span>でできている、と。",
+  "するとピタリと計算が合った。ミクロの世界では、エネルギーは<b>階段のようにトビトビ</b>。段と段の「中間」には絶対に存在できない。これが量子力学の始まりだ。"
+ ],
+ quote:"私は、それが物理的に意味を持つとは、長い間信じられなかった。",
+ key:"ミクロのエネルギーは<b>トビトビ（量子化）</b>。最小単位（量子）の整数倍の値しか取れない。",
+ simTitle:"連続の坂 vs トビトビの階段",
+ simHint:"左の「古典」ボールはどんな高さにも止まれる。右の「量子」ボールは決まった段にしか乗れない。光のかたまり（量子）を当てて一段ずつ登らせよう。中間に置こうとしても弾かれる。"},
+
+{n:9,t:"ボーアの原子：僕らの体はスカスカの空洞",who:"ニールス・ボーア",role:"原子模型の建設者",sim:"bohr",
+ lead:"君の体は、ほとんどが「何もない空間」でできている。",
+ body:[
+  "ボーアは、原子の中の電子が<b>決まった軌道の上しか回れない</b>ことを示した。エネルギーがトビトビだから、軌道もトビトビなのだ。",
+  "電子が外側の軌道へ飛び移る（吸収）と、戻るときに<b>光を放つ</b>。その光の色は、軌道の組み合わせで決まる。水素ガスが出す<span class='lead'>赤・水色・紫の決まった色の線（スペクトル）</span>は、こうして生まれる。星の成分が地球から分かるのも、この光のおかげだ。",
+  "そして原子の中身はスカスカだ。<b>原子核を1円玉</b>にたとえると、電子は<span class='lead'>1km先のサッカー場の端</span>を飛ぶほど遠い。間はぜんぶ空っぽ。それでも壁をすり抜けないのは、量子力学的な<b>反発</b>のおかげだ。"
+ ],
+ quote:"原子について深く考えてめまいがしないなら、君はまだ理解していない。",
+ key:"電子の軌道は<b>トビトビ</b>。飛び移りで出る光が<b>元素ごとの色（スペクトル）</b>。原子の中身は99.99%が空っぽ。",
+ simTitle:"水素原子と本物のスペクトル",
+ simHint:"外側の軌道（リング）をクリックすると電子が励起され、戻るときに光を放出。下のスペクトル帯に、水素が実際に出す色の線（656nm赤・486nm水色・434nm紫…）が刻まれていく。"},
+
+{n:10,t:"シュレーディンガーの猫：パラレルワールドは実在する？",who:"シュレーディンガー & ハイゼンベルク",role:"波動方程式／不確定性原理",sim:"doubleslit",
+ lead:"見るまでは、すべての可能性が「同時に」存在する。",
+ body:[
+  "ミクロの世界では、電子は<b>「右の穴を通った自分」と「左の穴を通った自分」</b>が同時に重なり合って存在できる。これを<span class='lead'>重ね合わせ</span>という。",
+  "二重スリット実験では、一個ずつ飛ばした電子が、まるで波のように<b>しま模様（干渉縞）</b>を作る。一個なのに両方の穴を通った証拠だ。",
+  "ところが「どっちの穴を通った？」と<b>観測した瞬間</b>、重ね合わせは壊れ、しま模様は消えて二本の帯になる。観測が現実を確定させる――これがミクロの掟だ。"
+ ],
+ quote:"観測するまで、猫は生きていて、かつ死んでいる。",
+ key:"観測前は<b>重ね合わせ（波）</b>で干渉縞。観測した瞬間に<b>一つの現実（粒）</b>に確定し、縞が消える。",
+ simTitle:"二重スリット実験：1個ずつ撃って縞を作る",
+ simHint:"電子を1個ずつ発射すると、最初はバラバラでも、数百個たまると干渉縞が浮かび上がる。「観測する👁」をONにすると、どちらの穴を通ったか分かってしまい、縞が消えて2本の帯になる。"},
+
+{n:11,t:"日本の物理学の父：仁科芳雄と「コペンハーゲン精神」",who:"仁科芳雄",role:"日本物理学の育ての親",sim:"copenhagen",
+ lead:"自由に議論できる場所が、天才を育てる。",
+ body:[
+  "仁科芳雄はデンマークのボーアのもとで学び、ある<b>文化</b>を日本に持ち帰った。それが<span class='lead'>「コペンハーゲン精神」</span>。",
+  "それは、教授も学生も関係なく、<b>誰もが対等に、自由に議論できる</b>空気のことだ。当時の日本では珍しい、上下関係のないオープンな研究スタイルだった。",
+  "理化学研究所のボロボロの小屋で、若き<b>湯川秀樹や朝永振一郎</b>が仁科を囲み、夜遅くまで熱く議論した。一つのアイデアが、人から人へ次々と伝わり、新しい発見へと育っていく。この場所から、世界に通用する日本物理学が生まれた。"
+ ],
+ quote:"間違いを恐れるな。間違いの中にこそ、新しい発見の芽がある。",
+ key:"<b>対等で自由な議論</b>こそ、新しいアイデアを生む土壌。仁科はその文化を日本に根づかせた。",
+ simTitle:"アイデア伝播ネットワーク",
+ simHint:"研究者の点をドラッグして配置を変えられる。誰かをクリックすると「アイデアの光」がネットワーク全体に伝わっていく――上下関係なく、誰からでも始められるのがコペンハーゲン精神。"},
+
+{n:12,t:"湯川・朝永：ノーベル賞への道",who:"湯川秀樹 & 朝永振一郎",role:"中間子論／繰り込み理論",sim:"meson",
+ lead:"日本人初のノーベル賞は、原子核の「のり」の発見だった。",
+ body:[
+  "原子核の中では、プラスの電気を持つ陽子どうしが本来は反発して<b>バラバラになるはず</b>。なのに、なぜくっついていられるのか？",
+  "湯川秀樹は予言した。陽子と中性子が<span class='lead'>「中間子」というボールをキャッチボール</span>し合うことで、強く結びついているのだ、と。これが<b>中間子論</b>。日本人初のノーベル賞を受賞した。この力は近くでは強烈だが、少し離れると急に効かなくなる（短距離力）。",
+  "一方、朝永振一郎は、計算するとなぜか答えが<b>無限大</b>になって壊れてしまう難問に挑み、<span class='lead'>「繰り込み理論」</span>でその無限大を見事に消し去ってノーベル賞を受賞した。"
+ ],
+ quote:"一日生きることは、一歩進むことでありたい。― 湯川秀樹",
+ key:"湯川＝原子核を結ぶ<b>中間子</b>を予言。朝永＝計算の<b>無限大</b>を消す方法を発明。二人とも日本人ノーベル賞。",
+ simTitle:"核力シミュレーター（湯川ポテンシャル）",
+ simHint:"陽子と中性子が中間子をキャッチボールし、引き合う。粒子をドラッグして引き離してみよう。近いと強力に引き戻されるが、離しすぎると力が届かず分裂する――これが短距離力だ。"},
+
+{n:13,t:"宇宙の究極レゴブロック：標準模型",who:"小林誠・益川敏英・P.ヒッグス",role:"標準模型の完成者たち",sim:"higgs",
+ lead:"この宇宙は、たった17種類のパーツでできている。",
+ body:[
+  "あらゆる物質、あらゆる力は、たった<b>17種類の素粒子</b>の組み合わせでできている。これが現代物理学の到達点<span class='lead'>「標準模型」</span>だ。",
+  "日本の<b>小林誠と益川敏英</b>は、まだ3種類しか見つかっていなかった時代に「クォークは6種類あるはずだ」と予言し、それが当たってノーベル賞を受賞した。",
+  "最後のピース、<b>ヒッグス粒子</b>が2012年に発見された。宇宙には<b>ヒッグス場</b>という見えない「水」が満ちていて、粒子はそれにまとわりつかれて動きにくくなる。その<span class='lead'>動きにくさが「重さ（質量）」の正体</span>だ。光（光子）は場を素通りするので質量ゼロ＝最速で進める。"
+ ],
+ quote:"自然は、私たちが想像するより、ずっとシンプルで美しい。",
+ key:"宇宙のパーツは<b>17種類</b>。ヒッグス場という「水」にまとわりつかれることが<b>質量（重さ）</b>の正体。",
+ simTitle:"ヒッグス場の中を走らせる",
+ simHint:"場の「濃さ」を変えて、粒子をドラッグして動かそう。場が濃いほど粒子は重く・動きにくくなり、止めると素早く減速する。光子だけは場を無視してスイスイ進む＝質量ゼロ。"},
+
+{n:14,t:"ブラックホールと宇宙の始まり：ビッグバン",who:"現代の物理学者たち",role:"野村泰紀 ほか",sim:"bigbang",
+ lead:"君の体は、大昔に爆発した星のかけらでできている。",
+ body:[
+  "138億年前、宇宙は原子よりも小さな一点だった。それが一瞬で猛烈に膨張した<b>「インフレーション」</b>、そして<span class='lead'>ビッグバン</span>で宇宙の歴史が始まった。",
+  "宇宙は冷えながら膨張し、素粒子→原子核→原子→星→銀河と、段階を追って姿を変えていく。星は内部で炭素や酸素などの<b>元素を作り</b>、寿命の最後に<b>超新星爆発</b>でそれを宇宙にばらまく。",
+  "そのかけらが集まって、次の星や惑星、そして<span class='lead'>僕らの体</span>になった。君の体の原子は、文字どおり<b>「星のかけら」</b>。宇宙は、星の死と誕生をくり返す壮大な輪廻なのだ。"
+ ],
+ quote:"私たちは、星屑からできている。― カール・セーガン",
+ key:"宇宙は一点から<b>インフレーション→ビッグバン</b>で誕生し、冷えながら星・銀河を作った。君の体は<b>星のかけら</b>。",
+ simTitle:"宇宙史タイムライン（138億年）",
+ simHint:"スライダーで宇宙誕生の瞬間から現在まで時間を進められる。各時代（インフレーション・元素誕生・宇宙の晴れ上がり・最初の星・銀河）で宇宙の姿と温度が変化する。▶で自動再生。"},
+
+{n:15,t:"エンディング：95%の謎と未来の君たちへ",who:"そして、君へ",role:"次の歴史をつくる人",sim:"darkuniverse",
+ lead:"私たちが知っているのは、宇宙のたった5%だけ。",
+ body:[
+  "ここまで天才たちが解き明かしてきた物質――星も、君も、すべて。それは宇宙全体の<span class='lead'>たった5%</span>にすぎない。",
+  "残りの<b>95%</b>は正体不明。目に見えないが重力を及ぼす<b>ダークマター（27%）</b>と、宇宙の膨張を加速させる謎のエネルギー<b>ダークエネルギー（68%）</b>。誰もその正体を知らない。",
+  "さらに、宇宙は一つではなく無数に存在する<b>「マルチバース」</b>かもしれない。科学は、まだまったく完成していない。",
+  "ニュートンからアインシュタイン、湯川、そして今日の物理学者へ。バトンはずっと渡されてきた。<span class='lead'>この宇宙の「OS」を書き換える次のバグを見つけ、新しい歴史を作るのは――今これを読んでいる、君かもしれない。</span>"
+ ],
+ quote:"私が遠くを見渡せたのは、巨人たちの肩の上に立っていたからだ。― ニュートン",
+ key:"宇宙の<b>95%は未解明</b>。ダークマター、ダークエネルギー、マルチバース。次の発見者は、君だ。",
+ simTitle:"宇宙の成分と、未来へのバトン",
+ simHint:"円グラフにマウスを乗せると各成分の説明が出る。わかっているのは外側のたった5%。最後のボタンで、君へのメッセージを受け取ろう。"}
+];
+
+/* =========================================================================
+   骨組み生成 ＆ ナビ
+   ========================================================================= */
+const homeEl=document.getElementById('home');
+const chaptersEl=document.getElementById('chapters');
+const pbar=document.getElementById('pbar');
+const pchip=document.getElementById('pchip');
+const indexGrid=document.getElementById('indexGrid');
+let current=0; const running={};
+
+CH.forEach(c=>{
+  const d=document.createElement('div');d.className='idx-card';
+  d.innerHTML=`<div class="num">第${c.n}章</div><div class="t">${c.t.split('：')[0]}</div><div class="d">${c.lead}</div>`;
+  d.onclick=()=>goto(c.n); indexGrid.appendChild(d);
+});
+CH.forEach(c=>{
+  const sec=document.createElement('section');sec.className='chapter';sec.id='ch'+c.n;
+  sec.innerHTML=`
+    <div class="ch-head"><span class="n">第${c.n}章</span>
+      <span class="who">👤 <b>${c.who}</b>｜${c.role}</span></div>
+    <h2>${c.t}</h2>
+    <div class="grid">
+      <div class="card story"><h3><span class="dot"></span>物語</h3>
+        <p class="lead">${c.lead}</p>${c.body.map(p=>`<p>${p}</p>`).join('')}
+        <div class="quote">"${c.quote}"</div>
+        <div class="keypoint">💡 <b>ここがポイント</b>：${c.key}</div></div>
+      <div class="card sim"><h3><span class="dot"></span>体験：${c.simTitle}</h3>
+        <div id="simwrap-${c.n}"></div>
+        <div class="hint">🎮 ${c.simHint}</div>
+        <div class="readout" id="readout-${c.n}"></div></div>
+    </div>
+    <div class="chnav">
+      <button id="prev-${c.n}">${c.n>1?`<div class="lab">← 前の章</div><div class="ttl">第${c.n-1}章 ${CH[c.n-2].t.split('：')[0]}</div>`:`<div class="lab">←</div><div class="ttl">最初です</div>`}</button>
+      <button class="next" id="next-${c.n}">${c.n<15?`<div class="lab">次の章 →</div><div class="ttl">第${c.n+1}章 ${CH[c.n].t.split('：')[0]}</div>`:`<div class="lab">→</div><div class="ttl">講義完了！</div>`}</button>
+    </div>
+    <div class="backtop" onclick="goto(0)">▲ 章の一覧にもどる</div>`;
+  chaptersEl.appendChild(sec);
+  const prev=sec.querySelector('#prev-'+c.n),next=sec.querySelector('#next-'+c.n);
+  if(c.n>1)prev.onclick=()=>goto(c.n-1);else prev.disabled=true;
+  if(c.n<15)next.onclick=()=>goto(c.n+1);else next.disabled=true;
+});
+
+function goto(n){
+  if(current>0&&running[current]){running[current].stop=true;running[current]=null;}
+  current=n;
+  homeEl.style.display=n===0?'block':'none';
+  document.querySelectorAll('.chapter').forEach(s=>s.classList.remove('active'));
+  if(n>0){
+    const sec=document.getElementById('ch'+n);sec.classList.add('active');
+    pbar.style.width=(n/15*100)+'%';pchip.textContent=`第${n}章 / 全15章`;
+    const wrap=document.getElementById('simwrap-'+n);
+    if(!wrap.dataset.built){SIMS[CH[n-1].sim](wrap,n);wrap.dataset.built='1';}
+  }else{pbar.style.width='6.6%';pchip.textContent='章をえらんでね';}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+window.goto=goto;
+
+/* =========================================================================
+   エンジン・ヘルパー
+   ========================================================================= */
+function makeStage(wrap){
+  const stage=document.createElement('div');stage.className='stage';
+  const cv=document.createElement('canvas');stage.appendChild(cv);wrap.appendChild(stage);
+  const ctx=cv.getContext('2d');
+  function resize(){const r=stage.getBoundingClientRect();const dpr=Math.min(2,window.devicePixelRatio||1);
+    cv.width=Math.max(1,r.width*dpr);cv.height=Math.max(1,r.height*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);cv._w=r.width;cv._h=r.height;}
+  resize();window.addEventListener('resize',resize);
+  return {stage,cv,ctx,resize};
+}
+function controls(wrap){const d=document.createElement('div');d.className='controls';wrap.appendChild(d);return d;}
+function slider(parent,label,min,max,val,step,onInput){
+  const l=document.createElement('label');const span=document.createElement('span');
+  span.innerHTML=label+': <span class="val"></span>';
+  const inp=document.createElement('input');inp.type='range';inp.min=min;inp.max=max;inp.value=val;inp.step=step||1;
+  const v=span.querySelector('.val');const upd=()=>{v.textContent=onInput(parseFloat(inp.value));};
+  inp.oninput=upd;l.appendChild(span);l.appendChild(inp);parent.appendChild(l);upd();return inp;
+}
+function button(parent,txt,cls,onClick){const b=document.createElement('button');
+  b.className='btn'+(cls?' '+cls:'');b.textContent=txt;b.onclick=onClick;parent.appendChild(b);return b;}
+function toggle(parent,opts,onChange){ // opts:[{label,val}], first is default
+  const t=document.createElement('div');t.className='toggle';const btns=[];
+  opts.forEach((o,i)=>{const b=document.createElement('button');b.textContent=o.label;
+    if(i===0)b.classList.add('on');b.onclick=()=>{btns.forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');onChange(o.val);};t.appendChild(b);btns.push(b);});
+  parent.appendChild(t);return t;
+}
+function statBar(wrap){const d=document.createElement('div');d.className='stats';wrap.appendChild(d);const map={};
+  return {set(key,label,val,color){if(!map[key]){const s=document.createElement('div');s.className='stat';
+    s.innerHTML='<span class="sl"></span><span class="sv"></span>';d.appendChild(s);map[key]=s;}
+    map[key].querySelector('.sl').textContent=label;
+    const sv=map[key].querySelector('.sv');sv.textContent=val;if(color)sv.style.color=color;}};
+}
+function loop(chNum,fn){const state={stop:false};running[chNum]=state;let last=performance.now();
+  function frame(now){if(state.stop)return;const dt=Math.min(0.04,(now-last)/1000);last=now;
+    fn(dt,now/1000);requestAnimationFrame(frame);}requestAnimationFrame(frame);return state;}
+function rd(n,t){const el=document.getElementById('readout-'+n);if(el)el.textContent=t;}
+function glow(ctx,x,y,r,inner,outer){const g=ctx.createRadialGradient(x,y,0,x,y,r);
+  g.addColorStop(0,inner);g.addColorStop(1,outer||'rgba(0,0,0,0)');ctx.fillStyle=g;
+  ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.fill();}
+function drawGrid(ctx,w,h,cell,color){ctx.strokeStyle=color||'rgba(95,214,255,.06)';ctx.lineWidth=1;ctx.beginPath();
+  for(let x=0;x<=w;x+=cell){ctx.moveTo(x+.5,0);ctx.lineTo(x+.5,h);}
+  for(let y=0;y<=h;y+=cell){ctx.moveTo(0,y+.5);ctx.lineTo(w,y+.5);}ctx.stroke();}
+function nmToRGB(wl){let r,g,b;
+  if(wl<380)return[80,0,110];
+  else if(wl<440){r=-(wl-440)/60;g=0;b=1;}
+  else if(wl<490){r=0;g=(wl-440)/50;b=1;}
+  else if(wl<510){r=0;g=1;b=-(wl-510)/20;}
+  else if(wl<580){r=(wl-510)/70;g=1;b=0;}
+  else if(wl<645){r=1;g=-(wl-645)/65;b=0;}
+  else if(wl<=780){r=1;g=0;b=0;}
+  else return[150,0,0];
+  return[Math.round(r*255),Math.round(g*255),Math.round(b*255)];}
+function pointerPos(cv,e){const r=cv.getBoundingClientRect();const t=e.touches?e.touches[0]:e;
+  return{x:t.clientX-r.left,y:t.clientY-r.top};}
+
+/* 星空背景 */
+(function(){const cv=document.getElementById('stars');const ctx=cv.getContext('2d');let stars=[];
+  function resize(){cv.width=innerWidth;cv.height=innerHeight;
+    stars=Array.from({length:150},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height,
+      r:Math.random()*1.4+.2,a:Math.random(),s:Math.random()*.6+.2}));}
+  resize();addEventListener('resize',resize);
+  (function tick(){ctx.clearRect(0,0,cv.width,cv.height);
+    for(const s of stars){s.a+=s.s*.02;const tw=.4+.6*Math.abs(Math.sin(s.a));
+      ctx.fillStyle='rgba(200,220,255,'+(tw*.8)+')';ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,7);ctx.fill();}
+    requestAnimationFrame(tick);})();})();
+
+/* =========================================================================
+   シミュレーター
+   ========================================================================= */
+const SIMS={};
+
+/* ---- 第1章：重力（軌道力学＋的当て） ---- */
+SIMS.gravity=function(wrap,n){
+  const {cv,ctx}=makeStage(wrap);const ctrl=controls(wrap);const stats=statBar(wrap);
+  let mode='orbit',gMul=1,projs=[],rocks=[],parts=[],score=0,drag=null;
+  toggle(ctrl,[{label:'🛰 軌道モード',val:'orbit'},{label:'🎯 的当てモード',val:'throw'}],v=>{
+    mode=v;projs=[];if(v==='throw')spawnRocks();});
+  const pre=document.createElement('div');pre.style.cssText='display:flex;gap:6px;flex-wrap:wrap';
+  [['🌙月',0.16],['🔴火星',0.38],['🌍地球',1],['🟠木星',2.5],['🚀無重力',0]].forEach(([nm,g])=>{
+    const b=document.createElement('button');b.className='btn ghost';b.style.padding='6px 10px';b.textContent=nm;
+    b.onclick=()=>gMul=g;pre.appendChild(b);});
+  ctrl.appendChild(pre);
+  button(ctrl,'クリア','ghost',()=>{projs=[];parts=[];});
+  function spawnRocks(){const w=cv._w,h=cv._h;rocks=[];for(let i=0;i<4;i++)
+    rocks.push({x:w*(.55+Math.random()*.4),y:h*(.12+Math.random()*.7),r:13+Math.random()*9});}
+  function explode(x,y,c){for(let i=0;i<18;i++){const a=Math.random()*7,s=40+Math.random()*160;
+    parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:1,c});}}
+  cv.addEventListener('pointerdown',e=>{const p=pointerPos(cv,e);
+    drag=mode==='throw'?{a:{x:cv._w*0.1,y:cv._h-34},b:p}:{a:p,b:p};});
+  cv.addEventListener('pointermove',e=>{if(drag)drag.b=pointerPos(cv,e);});
+  cv.addEventListener('pointerup',e=>{if(!drag)return;const p=pointerPos(cv,e);
+    const s=mode==='throw'?2.0:-2.4; // throw:撃ちたい方向へ / orbit:スリングショット
+    projs.push({x:drag.a.x,y:drag.a.y,vx:(p.x-drag.a.x)*s,vy:(p.y-drag.a.y)*s,trail:[],alive:true});
+    if(projs.length>6)projs.shift();drag=null;});
+  const GM=420000;
+  function accel(o,cx,cy){if(mode==='orbit'){const dx=cx-o.x,dy=cy-o.y,r=Math.hypot(dx,dy)+8;
+      const a=GM/(r*r);return[a*dx/r,a*dy/r,r];}return[0,gMul*900,0];}
+  function integrate(o,dt,cx,cy){const N=4,sd=dt/N;for(let s=0;s<N;s++){
+    const[ax,ay]=accel(o,cx,cy);o.vx+=ax*sd;o.vy+=ay*sd;o.x+=o.vx*sd;o.y+=o.vy*sd;}}
+  loop(n,(dt,t)=>{const w=cv._w,h=cv._h,cx=w/2,cy=h/2;
+    ctx.fillStyle='#03040c';ctx.fillRect(0,0,w,h);
+    const cell=Math.max(34,Math.min(w,h)/12);
+    drawGrid(ctx,w,h,cell);
+    const pr=Math.min(w,h)*0.075;
+    if(mode==='orbit'){
+      ctx.strokeStyle='rgba(95,214,255,.12)';ctx.setLineDash([3,6]);
+      for(let r=pr*2;r<Math.max(w,h)*0.7;r+=pr*2){ctx.beginPath();ctx.arc(cx,cy,r,0,7);ctx.stroke();}
+      ctx.setLineDash([]);
+      glow(ctx,cx,cy,pr*2.6,'rgba(90,150,255,.30)');
+      const g=ctx.createRadialGradient(cx-pr*.3,cy-pr*.3,2,cx,cy,pr);
+      g.addColorStop(0,'#bfe0ff');g.addColorStop(.5,'#3f7fd6');g.addColorStop(1,'#13315e');
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,pr,0,7);ctx.fill();
+    }else{ctx.fillStyle='#0e1330';ctx.fillRect(0,h-22,w,22);
+      for(const r of rocks){ctx.fillStyle='#7b6b55';ctx.beginPath();ctx.arc(r.x,r.y,r.r,0,7);ctx.fill();
+        ctx.fillStyle='#5a4d3d';ctx.beginPath();ctx.arc(r.x-r.r*.3,r.y-r.r*.2,r.r*.3,0,7);ctx.fill();}
+      // 固定の大砲（発射地点）― 砲身は狙う方向へ向く
+      const cnx=w*0.1,cny=h-34;let aimX=cnx+46,aimY=cny-44;
+      if(drag){aimX=drag.b.x;aimY=drag.b.y;}
+      ctx.save();ctx.translate(cnx,cny);ctx.rotate(Math.atan2(aimY-cny,aimX-cnx));
+      ctx.fillStyle='#3a4170';ctx.fillRect(0,-7,36,14);
+      ctx.fillStyle='#5a64a0';ctx.fillRect(30,-8,8,16);ctx.restore();
+      glow(ctx,cnx,cny,18,'rgba(124,255,178,.25)');
+      ctx.fillStyle='#222a52';ctx.beginPath();ctx.arc(cnx,cny,14,0,7);ctx.fill();
+      ctx.strokeStyle='#5fd6ff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(cnx,cny,14,0,7);ctx.stroke();
+      // 目盛り（距離・高さ）
+      const ground=h-22;ctx.font='10px sans-serif';
+      ctx.strokeStyle='rgba(95,214,255,.2)';ctx.lineWidth=1;
+      for(let i=1;cnx+i*cell<w;i++){const x=cnx+i*cell;ctx.beginPath();ctx.moveTo(x,ground);ctx.lineTo(x,ground-5);ctx.stroke();
+        if(i%2===0){ctx.fillStyle='rgba(153,162,214,.7)';ctx.fillText(i,x-3,ground-7);}}
+      for(let j=1;ground-j*cell>14;j++){const y=ground-j*cell;ctx.beginPath();ctx.moveTo(cnx,y);ctx.lineTo(cnx+5,y);ctx.stroke();
+        if(j%2===0){ctx.fillStyle='rgba(153,162,214,.7)';ctx.fillText(j,cnx+7,y+3);}}
+      ctx.fillStyle='rgba(153,162,214,.85)';ctx.fillText('距離→(マス)',w-80,ground-6);ctx.fillText('高さ↑',cnx+7,16);}
+    // prediction
+    if(drag){const ps=mode==='throw'?2.0:-2.4;
+      const o={x:drag.a.x,y:drag.a.y,vx:(drag.b.x-drag.a.x)*ps,vy:(drag.b.y-drag.a.y)*ps};
+      ctx.fillStyle='rgba(124,255,178,.55)';
+      for(let i=0;i<150;i++){integrate(o,0.016,cx,cy);
+        if(mode==='orbit'&&Math.hypot(cx-o.x,cy-o.y)<pr)break;
+        if(o.x<0||o.x>w||o.y<0||o.y>h)break;
+        if(i%4===0){ctx.beginPath();ctx.arc(o.x,o.y,1.6,0,7);ctx.fill();}}
+      ctx.strokeStyle='#5fd6ff';ctx.lineWidth=2;ctx.beginPath();
+      ctx.moveTo(drag.a.x,drag.a.y);ctx.lineTo(drag.b.x,drag.b.y);ctx.stroke();
+      ctx.fillStyle='#5fd6ff';ctx.beginPath();ctx.arc(drag.a.x,drag.a.y,5,0,7);ctx.fill();}
+    // projectiles
+    let live=0,lastSpeed=0,lastAlt=0;
+    for(const o of projs){if(!o.alive)continue;integrate(o,dt,cx,cy);
+      o.trail.push({x:o.x,y:o.y});if(o.trail.length>120)o.trail.shift();
+      // collisions
+      if(mode==='orbit'){const r=Math.hypot(cx-o.x,cy-o.y);lastSpeed=Math.hypot(o.vx,o.vy);lastAlt=r-pr;
+        if(r<pr){o.alive=false;explode(o.x,o.y,'#ff7eb6');}
+        if(o.x<-50||o.x>w+50||o.y<-50||o.y>h+50){o.alive=false;}}
+      else{lastSpeed=Math.hypot(o.vx,o.vy);
+        if(o.y>h-22){o.alive=false;explode(o.x,o.y,'#888');}
+        for(const r of rocks){if(Math.hypot(r.x-o.x,r.y-o.y)<r.r+5){r.hit=true;o.alive=false;
+          score++;explode(o.x,o.y,'#ffd166');}}
+        rocks=rocks.filter(r=>!r.hit);if(rocks.length===0)spawnRocks();
+        if(o.x<-30||o.x>w+30)o.alive=false;}
+      // draw trail
+      ctx.strokeStyle='rgba(124,255,178,.4)';ctx.lineWidth=2;ctx.beginPath();
+      o.trail.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke();
+      glow(ctx,o.x,o.y,10,'rgba(124,255,178,.8)');
+      ctx.fillStyle='#eafff3';ctx.beginPath();ctx.arc(o.x,o.y,4.5,0,7);ctx.fill();live++;}
+    projs=projs.filter(o=>o.alive);
+    // particles
+    for(const p of parts){p.life-=dt*1.5;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=400*dt;
+      if(p.life>0){ctx.fillStyle=p.c.replace(')',','+p.life.toFixed(2)+')').replace('rgb','rgba').replace('#','');
+        ctx.globalAlpha=Math.max(0,p.life);ctx.fillStyle=p.c;ctx.beginPath();ctx.arc(p.x,p.y,3,0,7);ctx.fill();ctx.globalAlpha=1;}}
+    parts=parts.filter(p=>p.life>0);
+    if(projs.length===0&&!drag){ctx.fillStyle='#8c95cc';ctx.font='14px sans-serif';ctx.textAlign='center';
+      ctx.fillText(mode==='orbit'?'惑星の横をドラッグして、人工衛星を発射しよう':'左下の大砲から、撃ちたい方向へドラッグして離す（長いほど強い）',cx,h*0.88);ctx.textAlign='left';}
+    stats.set('mode','モード',mode==='orbit'?'軌道力学':'放物運動');
+    stats.set('g','重力',mode==='orbit'?'1/r²（万有引力）':gMul.toFixed(2)+' G');
+    if(mode==='orbit'){stats.set('sp','衛星の速さ',Math.round(lastSpeed));stats.set('alt','高度',Math.max(0,Math.round(lastAlt)));}
+    else stats.set('score','撃破スコア',score,'#ffd166');
+    rd(n,mode==='orbit'?'横向きに速く投げると「落ち続けながら回る」＝周回。速すぎると振り切って脱出、遅すぎると墜落':
+      '重力が強いほど弾は早く落ちる。月では遠くまで飛び、木星ではすぐ落ちる');
+  });
+};
+
+/* ---- 第2章：ダ・ヴィンチ ---- */
+SIMS.davinci=function(wrap,n){
+  const inp=document.createElement('input');inp.type='text';inp.value='かんさつこそかがく';
+  inp.style.cssText='width:100%;padding:10px;border-radius:8px;border:1px solid #272d55;background:#141833;color:#fff;font-size:15px;margin-bottom:8px';
+  wrap.appendChild(inp);
+  const mirror=document.createElement('div');
+  mirror.style.cssText='transform:scaleX(-1);text-align:center;font-size:24px;padding:8px;background:#0f1330;border:1px dashed #5fd6ff;border-radius:8px;color:#ffd166;min-height:1.6em;letter-spacing:2px';
+  wrap.appendChild(mirror);
+  const lab=document.createElement('div');lab.style.cssText='font-size:11px;color:#99a2d6;text-align:center;margin:4px 0 8px';
+  lab.textContent='↑ 鏡文字（左右反転）。スマホのカメラを鏡にして読んでみて！';wrap.appendChild(lab);
+  const upd=()=>mirror.textContent=inp.value||' ';inp.oninput=upd;upd();
+  const {cv,ctx}=makeStage(wrap);const ctrl=controls(wrap);
+  let hr=1.4,flap=1;
+  slider(ctrl,'心拍の速さ',0.5,3,1.4,0.1,v=>{hr=v;return Math.round(v*55)+' 拍/分';});
+  slider(ctrl,'羽ばたきの速さ',0.5,4,1,0.1,v=>{flap=v;return v.toFixed(1)+'×';});
+  let cells=null;
+  loop(n,(dt,t)=>{const w=cv._w,h=cv._h;ctx.fillStyle='#0a0c20';ctx.fillRect(0,0,w,h);
+    // parchment tint
+    ctx.fillStyle='rgba(80,65,40,.10)';ctx.fillRect(0,0,w,h);
+    // ---- heart (left) ----
+    const beat=Math.pow(Math.abs(Math.sin(t*hr*Math.PI)),3);
+    const cx=w*0.27,cy=h*0.5,R=Math.min(w,h)*0.15*(1+beat*0.2);
+    ctx.strokeStyle='#5a1d2e';ctx.lineWidth=11;ctx.lineCap='round';
+    ctx.beginPath();ctx.moveTo(cx,cy-R);ctx.quadraticCurveTo(cx+R*1.6,cy-R*1.8,cx+w*0.12,cy-R*1.4);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx,cy+R*.6);ctx.quadraticCurveTo(cx-R*1.4,cy+R*1.8,cx-w*0.12,cy+R*1.6);ctx.stroke();
+    glow(ctx,cx,cy,R*2.2,'rgba(220,40,70,'+(0.12+beat*0.18)+')');
+    ctx.fillStyle='rgba(210,40,68,'+(0.78+beat*0.22)+')';ctx.beginPath();
+    ctx.moveTo(cx,cy+R*0.85);
+    ctx.bezierCurveTo(cx-R*1.5,cy-R*0.45,cx-R*0.55,cy-R*1.3,cx,cy-R*0.45);
+    ctx.bezierCurveTo(cx+R*0.55,cy-R*1.3,cx+R*1.5,cy-R*0.45,cx,cy+R*0.85);ctx.fill();
+    if(!cells)cells=Array.from({length:30},(_,i)=>({p:i/30,lane:i%2}));
+    for(const c of cells){c.p+=(0.16+beat*0.55)*dt;if(c.p>1)c.p-=1;
+      let x,y;if(c.lane===0){x=cx+(w*0.12-cx)*c.p;y=cy-R+(cy-R*1.4-(cy-R))*Math.sin(c.p*Math.PI);}
+      else{x=cx+(-w*0.12-cx)*c.p;y=cy+R*.6+(cy+R*1.6-(cy+R*.6))*Math.sin(c.p*Math.PI);}
+      ctx.fillStyle='#ff5a7a';ctx.beginPath();ctx.arc(x,y,3,0,7);ctx.fill();}
+    ctx.fillStyle='#c9b48a';ctx.font='12px serif';ctx.fillText('心臓と血流の観察',w*0.12,h-12);
+    // ---- bird wing (right) ----
+    const bx=w*0.72,by=h*0.42;const ang=Math.sin(t*flap*5)*0.7;
+    ctx.save();ctx.translate(bx,by);
+    // body
+    ctx.fillStyle='#d8c79a';ctx.beginPath();ctx.ellipse(0,0,16,9,0,0,7);ctx.fill();
+    for(const dir of [1,-1]){ctx.save();ctx.scale(dir,1);ctx.rotate(ang);
+      ctx.strokeStyle='#c9b48a';ctx.lineWidth=2;ctx.fillStyle='rgba(216,199,154,.5)';
+      ctx.beginPath();ctx.moveTo(8,0);
+      for(let i=0;i<=6;i++){const fa=i/6;ctx.lineTo(8+fa*w*0.16,Math.sin(fa*2.2)*18-6);}
+      for(let i=6;i>=0;i--){const fa=i/6;ctx.lineTo(8+fa*w*0.16,Math.sin(fa*2.2)*18+10);}
+      ctx.closePath();ctx.fill();ctx.stroke();
+      // feathers
+      ctx.strokeStyle='#b09a6a';ctx.lineWidth=1;
+      for(let i=1;i<=6;i++){const fa=i/6;ctx.beginPath();
+        ctx.moveTo(8+fa*w*0.16,Math.sin(fa*2.2)*18-2);ctx.lineTo(8+fa*w*0.16,Math.sin(fa*2.2)*18+14);ctx.stroke();}
+      ctx.restore();}
+    ctx.restore();
+    ctx.fillStyle='#c9b48a';ctx.font='12px serif';ctx.fillText('鳥の飛翔の研究',w*0.6,h-12);
+    rd(n,'観察→記録→理解。ダ・ヴィンチは500年前にこれを実践した');
+  });
+};
+
+/* ---- 第3章：ガリレイ 二視点 ---- */
+SIMS.galileo=function(wrap,n){
+  const {cv,ctx}=makeStage(wrap);const ctrl=controls(wrap);const stats=statBar(wrap);
+  let speed=180,ball=null,trainX=0;
+  slider(ctrl,'新幹線の速さ',0,300,180,10,v=>{speed=v;return v+' km/h';});
+  button(ctrl,'ボールを真上に投げる',null,()=>{ball={t:0}});
+  loop(n,(dt)=>{const w=cv._w,h=cv._h;ctx.fillStyle='#070a1c';ctx.fillRect(0,0,w,h);
+    const px=speed/3.6*7;trainX+=px*dt;
+    const halfH=h/2;
+    // divider
+    ctx.strokeStyle='#272d55';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,halfH);ctx.lineTo(w,halfH);ctx.stroke();
+    if(ball){ball.t+=dt;if(ball.t>1.6)ball=null;}
+    function drawScene(oy,sh,outside){
+      const floor=oy+sh-26;
+      ctx.fillStyle='#0d1330';ctx.fillRect(0,floor,w,oy+sh-floor);
+      // poles move only in outside view
+      if(outside){for(let i=0;i<16;i++){const x=((i*120-trainX*0.5)%(w+120)+w+120)%(w+120)-60;
+        ctx.fillStyle='#1a2148';ctx.fillRect(x,floor-60,7,60);}}
+      // train
+      const tw=w*0.5,tx=w*0.5-tw/2,ty=oy+sh*0.18,th=sh*0.52;
+      ctx.fillStyle='#0d2a44';ctx.strokeStyle='#5fd6ff';ctx.lineWidth=2;
+      ctx.fillRect(tx,ty,tw,th);ctx.strokeRect(tx,ty,tw,th);
+      ctx.fillStyle='#0d2a44';ctx.beginPath();ctx.moveTo(tx+tw,ty);ctx.lineTo(tx+tw+38,ty+th/2);ctx.lineTo(tx+tw,ty+th);ctx.fill();
+      ctx.fillStyle=outside?'#0a1e30':'#050813';ctx.fillRect(tx+12,ty+12,tw-24,th-24);
+      // person
+      const cxp=tx+tw*0.38,fy=ty+th-14;
+      ctx.fillStyle='#ffd166';ctx.beginPath();ctx.arc(cxp,fy-26,8,0,7);ctx.fill();ctx.fillRect(cxp-6,fy-18,12,20);
+      // ball
+      if(ball){const yy=fy-30-( -260*ball.t+300*ball.t*ball.t )*-1; // up then down
+        const localY=fy-30-(260*ball.t-300*ball.t*ball.t)*1.0;
+        let xx=cxp,by=localY;
+        if(outside){const arc=(speed/3.6*7)*ball.t;xx=cxp+Math.min(tw*0.45,arc*0.0)+ (speed/3.6*1.6)*ball.t;
+          // show drift: ball carried forward with train
+          xx=cxp+ (px*0.20)*ball.t*10*0+ (speed/3.6*1.7)*ball.t;}
+        glow(ctx,xx,by,9,'rgba(124,255,178,.7)');ctx.fillStyle='#7CFFB2';ctx.beginPath();ctx.arc(xx,by,6,0,7);ctx.fill();
+        if(outside){ctx.strokeStyle='rgba(124,255,178,.35)';ctx.lineWidth=2;ctx.beginPath();
+          for(let s=0;s<=ball.t;s+=0.02){const ly=fy-30-(260*s-300*s*s);const lx=cxp+(speed/3.6*1.7)*s;
+            s===0?ctx.moveTo(lx,ly):ctx.lineTo(lx,ly);}ctx.stroke();}
+        else{ctx.strokeStyle='rgba(124,255,178,.3)';ctx.setLineDash([4,4]);ctx.beginPath();
+          ctx.moveTo(cxp,fy-30);ctx.lineTo(cxp,fy-30-80);ctx.stroke();ctx.setLineDash([]);}
+      }
+      return {tx,ty};
+    }
+    const a=drawScene(0,halfH,true);
+    const b=drawScene(halfH,halfH,false);
+    ctx.fillStyle='#5fd6ff';ctx.font='bold 13px sans-serif';
+    ctx.fillText('🌍 外（地上）の視点：山なりの放物線',12,20);
+    ctx.fillText('🚆 車内の視点：まっすぐ真上→真下',12,halfH+20);
+    stats.set('v','速さ',speed+' km/h');stats.set('rel','車内の物理','地上と同一');
+    rd(n,speed===0?'止まっている：どちらの視点でもボールは真上→真下':
+      `走行中でも車内では真上→真下に落ちる。外から見ると前進しながら放物線――同じ現象が視点で違って見える`);
+  });
+};
+
+/* ---- 第4章：熱力学 気体＋速度分布 ---- */
+SIMS.thermo=function(wrap,n){
+  const {cv,ctx}=makeStage(wrap);const ctrl=controls(wrap);const stats=statBar(wrap);
+  let temp=1,mols=[],bins=new Array(22).fill(0),pressure=0,wallHits=0,hitTimer=0;
+  slider(ctrl,'温度',0.3,3,1,0.05,v=>{const old=temp;temp=v;rescale(old,v);return Math.round(v*110)+' °C';});
+  button(ctrl,'全員を同じ速さにする',null,()=>{const sp=120*temp;for(const m of mols){const a=Math.random()*7;
+    m.vx=Math.cos(a)*sp;m.vy=Math.sin(a)*sp;}});
+  const R=6;
+  function rescale(o,v){if(!mols.length)return;const f=v/o;for(const m of mols){m.vx*=f;m.vy*=f;}}
+  function init(){const w=cv._w,h=cv._h;const gw=w*0.62;mols=[];
+    for(let i=0;i<70;i++){const sp=120*temp,a=Math.random()*7;
+      mols.push({x:20+Math.random()*(gw-40),y:30+Math.random()*(h-60),vx:Math.cos(a)*sp,vy:Math.sin(a)*sp});}}
+  loop(n,(dt,t)=>{const w=cv._w,h=cv._h;if(!mols.length)init();
+    ctx.fillStyle='#060a1c';ctx.fillRect(0,0,w,h);
+    const gw=w*0.6,pistonY=Math.max(24,h*0.34-(temp-1)*h*0.13);
+    const left=12,right=gw-12,bottom=h-12;
+    hitTimer+=dt;
+    // move + wall collide
+    for(const m of mols){m.x+=m.vx*dt;m.y+=m.vy*dt;
+      if(m.x<left+R){m.x=left+R;m.vx*=-1;wallHits++;}
+      if(m.x>right-R){m.x=right-R;m.vx*=-1;wallHits++;}
+      if(m.y>bottom-R){m.y=bottom-R;m.vy*=-1;wallHits++;}
+      if(m.y<pistonY+R){m.y=pistonY+R;m.vy*=-1;wallHits++;}}
+    // pair collisions (elastic, equal mass)
+    for(let i=0;i<mols.length;i++)for(let j=i+1;j<mols.length;j++){const a=mols[i],b=mols[j];
+      let dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy);
+      if(d>0&&d<2*R){const nx=dx/d,ny=dy/d;const p=(a.vx-b.vx)*nx+(a.vy-b.vy)*ny;
+        if(p>0){a.vx-=p*nx;a.vy-=p*ny;b.vx+=p*nx;b.vy+=p*ny;}
+        const ov=(2*R-d)/2;a.x-=nx*ov;a.y-=ny*ov;b.x+=nx*ov;b.y+=ny*ov;}}
+    // piston + flame
+    ctx.fillStyle='#2a3570';ctx.fillRect(left-2,pistonY-13,right-left+4,15);
+    ctx.fillStyle='#5fd6ff';ctx.fillRect(left-2,pistonY-2,right-left+4,3);
+    ctx.fillStyle='#99a2d6';ctx.fillRect((left+right)/2-22,pistonY-27,44,14);
+    ctx.strokeStyle='#1a2148';ctx.lineWidth=3;ctx.beginPath();
+    ctx.moveTo(left,pistonY);ctx.lineTo(left,bottom);ctx.lineTo(right,bottom);ctx.lineTo(right,pistonY);ctx.stroke();
+    for(let i=0;i<9;i++){const fx=left+(i+.5)*(right-left)/9,fh=8+temp*13*(0.6+Math.abs(Math.sin(t*9+i))*0.4);
+      ctx.fillStyle='rgba(255,'+Math.round(120+temp*40)+',20,'+(0.35+temp*0.12)+')';
+      ctx.beginPath();ctx.moveTo(fx-6,bottom+12);ctx.lineTo(fx,bottom+12-fh);ctx.lineTo(fx+6,bottom+12);ctx.fill();}
+    // molecules + histogram bins
+    const nb=bins.length;const tmp=new Array(nb).fill(0);let maxSp=400*Math.sqrt(temp);
+    for(const m of mols){const sp=Math.hypot(m.vx,m.vy);const heat=Math.min(1,sp/(maxSp+1));
+      ctx.fillStyle='rgb('+Math.round(120+heat*135)+','+Math.round(140-heat*70)+','+Math.round(255-heat*150)+')';
+      ctx.beginPath();ctx.arc(m.x,m.y,R,0,7);ctx.fill();
+      const bi=Math.min(nb-1,Math.floor(sp/maxSp*nb));tmp[bi]++;}
+    for(let i=0;i<nb;i++)bins[i]+=(tmp[i]-bins[i])*Math.min(1,dt*3);
+    // pressure (smoothed hits per time)
+    if(hitTimer>0.2){pressure+=((wallHits/hitTimer)-pressure)*0.5;wallHits=0;hitTimer=0;}
+    // histogram panel
+    const px0=gw+14,py0=h*0.55,pw=w-gw-26,ph=h*0.38;
+    ctx.fillStyle='#0a0e26';ctx.fillRect(px0,py0,pw,ph);ctx.strokeStyle='#272d55';ctx.strokeRect(px0,py0,pw,ph);
+    const mx=Math.max(1,...bins);
+    for(let i=0;i<nb;i++){const bh=bins[i]/mx*(ph-18);const bx=px0+4+i*(pw-8)/nb;
+      const heat=i/nb;ctx.fillStyle='rgb('+Math.round(120+heat*135)+','+Math.round(140-heat*70)+','+Math.round(255-heat*150)+')';
+      ctx.fillRect(bx,py0+ph-8-bh,(pw-8)/nb-1,bh);}
+    ctx.strokeStyle='rgba(153,162,214,.35)';ctx.lineWidth=1;
+    for(let i=0;i<=5;i++){const xx=px0+4+i/5*(pw-8);ctx.beginPath();ctx.moveTo(xx,py0+ph-8);ctx.lineTo(xx,py0+ph-4);ctx.stroke();}
+    ctx.fillStyle='#99a2d6';ctx.font='11px sans-serif';ctx.fillText('速度の分布 →',px0+4,py0+12);
+    ctx.fillText('遅い        速い',px0+4,py0+ph-1);
+    // pressure gauge
+    ctx.fillStyle='#99a2d6';ctx.font='11px sans-serif';ctx.fillText('気圧',gw+14,h*0.1);
+    const gx=gw+14,gy=h*0.14,gwid=pw;ctx.fillStyle='#0a0e26';ctx.fillRect(gx,gy,gwid,16);
+    ctx.fillStyle='#ff7eb6';ctx.fillRect(gx,gy,Math.min(gwid,pressure/600*gwid),16);
+    ctx.strokeStyle='#272d55';ctx.strokeRect(gx,gy,gwid,16);
+    stats.set('T','温度',Math.round(temp*110)+'°C','#ff7eb6');
+    stats.set('P','気圧',Math.round(pressure));
+    stats.set('N','分子数',mols.length);
+    rd(n,'分子は実際にぶつかり合っている。「全員同じ速さ」から始めても、衝突で自然に速度の分布が生まれる＝これが熱の正体');
+  });
+};
+
+/* ---- 第5章：マクスウェル 電磁波 ---- */
+SIMS.maxwell=function(wrap,n){
+  const {cv,ctx}=makeStage(wrap);const ctrl=controls(wrap);const stats=statBar(wrap);
+  let logf=2,t=0; // logf 0..6 maps spectrum
+  slider(ctrl,'周波数（電磁スペクトル）',0,6,2,0.05,v=>{logf=v;return spec(v).name;});
+  function spec(v){const bands=[
+    {n:'電波',c:[120,160,255],wl:0},{n:'マイクロ波',c:[120,220,255],wl:0},
+    {n:'赤外線',c:[255,120,60],wl:0},{n:'可視光',c:[120,255,120],wl:1},
+    {n:'紫外線',c:[180,120,255],wl:0},{n:'X線',c:[200,200,255],wl:0},{n:'ガンマ線',c:[255,120,200],wl:0}];
+    let b=bands[Math.min(6,Math.floor(v))];let col=b.c;
+    if(b.wl){const wl=700-(v-3)*320;const rgb=nmToRGB(wl);col=rgb;}
+    return {name:b.n,col};}
+  loop(n,(dt)=>{t+=dt;const w=cv._w,h=cv._h;ctx.fillStyle='#03040c';ctx.fillRect(0,0,w,h);
+    const s=spec(logf),col='rgb('+s.col.join(',')+')';
+    const midY=h*0.42,amp=h*0.2,k=(0.6+logf*0.45)*0.04,sp=5+logf*1.2;
+    // axis
+    ctx.strokeStyle='#1a2148';ctx.beginPath();ctx.moveTo(0,midY);ctx.lineTo(w,midY);ctx.stroke();
+    // antenna with oscillating charge
+    const ax=40,charge=Math.sin(-t*sp)*amp;
+    ctx.strokeStyle='#555c8a';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(ax,midY-amp);ctx.lineTo(ax,midY+amp);ctx.stroke();
+    glow(ctx,ax,midY-charge,10,'rgba(255,90,122,.8)');ctx.fillStyle='#ff5a7a';ctx.beginPath();ctx.arc(ax,midY-charge,6,0,7);ctx.fill();
+    // E field (red, vertical)
+    ctx.strokeStyle='#ff5a7a';ctx.lineWidth=2.4;ctx.beginPath();
+    for(let x=ax;x<w;x+=3){const y=midY-Math.sin(k*(x-ax)-t*sp)*amp;x===ax?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();
+    for(let x=ax;x<w;x+=26){const e=Math.sin(k*(x-ax)-t*sp)*amp;ctx.strokeStyle='rgba(255,90,122,.3)';
+      ctx.beginPath();ctx.moveTo(x,midY);ctx.lineTo(x,midY-e);ctx.stroke();}
+    // B field (blue, perpendicular -> drawn as isometric depth)
+    ctx.strokeStyle='#5fd6ff';ctx.lineWidth=2.4;ctx.beginPath();
+    for(let x=ax;x<w;x+=3){const b=Math.sin(k*(x-ax)-t*sp)*amp*0.6;const y=midY+b*0.45;const xx=x+b*0.55;
+      x===ax?ctx.moveTo(xx,y):ctx.lineTo(xx,y);}ctx.stroke();
+    // traveling photon
+    const lx=ax+((t*200)%(w-ax));glow(ctx,lx,midY,12,col);
+    ctx.fillStyle=col;ctx.beginPath();ctx.arc(lx,midY,7,0,7);ctx.fill();
+    // spectrum bar
+    const by=h*0.86,bh=20,bx0=20,bw=w-40;const names=['電波','マイクロ波','赤外線','可視光','紫外線','X線','ガンマ線'];
+    for(let i=0;i<7;i++){const c=spec(i+0.5).col;ctx.fillStyle='rgb('+c.join(',')+')';
+      ctx.fillRect(bx0+i*bw/7,by,bw/7,bh);}
+    ctx.fillStyle='#fff';ctx.fillRect(bx0+logf/6*bw-1,by-6,2,bh+12);
+    ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(bx0+logf/6*bw,by-6);ctx.lineTo(bx0+logf/6*bw,by+bh+6);ctx.stroke();
+    ctx.font='10px sans-serif';ctx.fillStyle='#99a2d6';
+    names.forEach((nm,i)=>{ctx.fillText(nm,bx0+i*bw/7+2,by-4);});
+    ctx.fillStyle='#ff5a7a';ctx.font='13px sans-serif';ctx.fillText('電場（赤）',w-110,22);
+    ctx.fillStyle='#5fd6ff';ctx.fillText('磁場（青）',w-110,42);
+    stats.set('type','いまの光',s.name,col);stats.set('c','速さ','30万 km/s（不変）');
+    rd(n,'電場と磁場が互いを生み出しながら進むのが「光」。周波数を変えると電波からガンマ線まで姿を変える');
+  });
+};
+
+/* ---- 第6章：特殊相対論 双子のパラドックス ---- */
+SIMS.special=function(wrap,n){
+  const {cv,ctx}=makeStage(wrap);const ctrl=controls(wrap);const stats=statBar(wrap);
+  let beta=0,earthAge=15,shipAge=15,bounce=0;
+  slider(ctrl,'宇宙船の速さ（光速比）',0,0.99,0,0.01,v=>{beta=v;return Math.round(v*100)+'% c';});
+  button(ctrl,'年齢をリセット','ghost',()=>{earthAge=15;shipAge=15;});
+  loop(n,(dt,t)=>{const w=cv._w,h=cv._h;ctx.fillStyle='#070a1c';ctx.fillRect(0,0,w,h);
+    const gamma=1/Math.sqrt(1-beta*beta);
+    earthAge+=dt*1.0;shipAge+=dt*1.0/gamma;
+    bounce+=dt;
+    // light clocks
+    const topY=h*0.14,botY=h*0.6,len=botY-topY;
+    // earth clock (left)
+    const ex=w*0.26;
+    ctx.fillStyle='#5fd6ff';ctx.fillRect(ex-34,topY-3,68,4);ctx.fillRect(ex-34,botY-1,68,4);
+    const eb=Math.abs(((bounce*1.1)%2)-1);
+    glow(ctx,ex,topY+eb*len,8,'rgba(255,232,59,.7)');ctx.fillStyle='#ffe83b';ctx.beginPath();ctx.arc(ex,topY+eb*len,6,0,7);ctx.fill();
+    ctx.fillStyle='#9aa3d4';ctx.font='12px sans-serif';ctx.textAlign='center';
+    ctx.fillText('🌍 地球の双子',ex,botY+22);
+    // ship clock (right) diagonal, longer period
+    const mx=w*0.7,drift=40*beta;
+    ctx.fillStyle='#5fd6ff';ctx.fillRect(mx-34,topY-3,68,4);ctx.fillRect(mx-34,botY-1,68,4);
+    const mb=Math.abs(((bounce*1.1/gamma)%2)-1);const mdrift=Math.sin(bounce*1.1/gamma*Math.PI)*drift;
+    ctx.strokeStyle='rgba(255,232,59,.4)';ctx.lineWidth=2;ctx.beginPath();
+    ctx.moveTo(mx-drift,botY);ctx.lineTo(mx,topY);ctx.lineTo(mx+drift,botY);ctx.stroke();
+    glow(ctx,mx+mdrift,topY+mb*len,8,'rgba(255,126,182,.7)');ctx.fillStyle='#ff7eb6';ctx.beginPath();ctx.arc(mx+mdrift,topY+mb*len,6,0,7);ctx.fill();
+    ctx.fillStyle='#9aa3d4';ctx.fillText('🚀 宇宙船の双子',mx,botY+22);
+    // length contraction: spaceship drawn squashed
+    const shipW=120/gamma,shipH=26;const sx=w*0.5,sy=h*0.78;
+    ctx.fillStyle='#0d2a44';ctx.strokeStyle='#5fd6ff';ctx.lineWidth=2;
+    ctx.beginPath();ctx.ellipse(sx,sy,shipW/2,shipH/2,0,0,7);ctx.fill();ctx.stroke();
+    glow(ctx,sx+shipW/2-4,sy,8,'rgba(255,200,80,.7)');
+    ctx.fillStyle='#fff';ctx.font='11px sans-serif';ctx.fillText('進行方向に縮む（ローレンツ収縮）',sx,sy+32);ctx.textAlign='left';
+    const diff=earthAge-shipAge;
+    stats.set('g','時間の伸び γ',gamma.toFixed(2)+'倍','#ffd166');
+    stats.set('e','地球の双子',earthAge.toFixed(1)+'歳','#5fd6ff');
+    stats.set('s','宇宙船の双子',shipAge.toFixed(1)+'歳','#ff7eb6');
+    stats.set('d','年齢差','+'+diff.toFixed(1)+'歳');
+    rd(n,beta<0.01?'静止中：二人の時間は同じペースで進む':
+      `光速の${Math.round(beta*100)}%で飛行中：宇宙船では時間が${(1/gamma*100).toFixed(0)}%の速さでしか進まない＝双子の差が開く`);
+  });
+};
+
+/* ---- 第7章：一般相対論 時空＋重力レンズ＋BH ---- */
+SIMS.general=function(wrap,n){
+  const {cv,ctx}=makeStage(wrap);const ctrl=controls(wrap);const stats=statBar(wrap);
+  let mass=1.2,rays=[],rayTimer=0,ang=0,blackhole=false;
+  slider(ctrl,'中心天体の質量',0,6,1.2,0.1,v=>{mass=v;blackhole=v>=5;
+    return v>=5?'ブラックホール級':v.toFixed(1)+' 太陽質量';});
+  loop(n,(dt,t)=>{const w=cv._w,h=cv._h,cx=w/2,cy=h/2;ctx.fillStyle='#03040c';ctx.fillRect(0,0,w,h);
+    const M=mass*9000;const rs=Math.min(w,h)*0.04*Math.sqrt(mass+0.2); // schwarzschild-ish
+    function depth(x,y){const d=Math.hypot(x-cx,y-cy);return M*60/(d+50);}
+    // grid
+    ctx.strokeStyle='rgba(95,214,255,.22)';ctx.lineWidth=1;const step=Math.max(24,w/24);
+    for(let gx=0;gx<=w;gx+=step){ctx.beginPath();for(let gy=0;gy<=h;gy+=7){
+      const yy=gy+depth(gx,gy)-mass*16;gy===0?ctx.moveTo(gx,yy):ctx.lineTo(gx,yy);}ctx.stroke();}
+    for(let gy=0;gy<=h;gy+=step){ctx.beginPath();for(let gx=0;gx<=w;gx+=7){
+      const yy=gy+depth(gx,gy)-mass*16;gx===0?ctx.moveTo(gx,yy):ctx.lineTo(gx,yy);}ctx.stroke();}
+    // emit light rays from left
+    rayTimer+=dt;if(rayTimer>0.5){rayTimer=0;const y=cy+(Math.random()-0.5)*h*0.7;
+      rays.push({x:0,y,vx:260,vy:0,trail:[],alive:true});if(rays.length>10)rays.shift();}
+    for(const r of rays){if(!r.alive)continue;for(let s=0;s<3;s++){
+      const dx=cx-r.x,dy=cy-r.y,dd=Math.hypot(dx,dy)+6;const a=M*1.6/(dd*dd);
+      r.vx+=a*dx/dd*dt/3*60;r.vy+=a*dy/dd*dt/3*60;
+      const spd=Math.hypot(r.vx,r.vy);r.vx=r.vx/spd*260;r.vy=r.vy/spd*260; // light keeps speed
+      r.x+=r.vx*dt/3;r.y+=r.vy*dt/3;
+      if(blackhole&&dd<rs*1.4){r.alive=false;break;}}
+      r.trail.push({x:r.x,y:r.y});if(r.trail.length>90)r.trail.shift();
+      if(r.x>w+20||r.x<-20||r.y<-20||r.y>h+20)r.alive=false;
+      ctx.strokeStyle='rgba(255,232,120,.7)';ctx.lineWidth=2;ctx.beginPath();
+      r.trail.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke();}
+    rays=rays.filter(r=>r.alive||r.trail.length);
+    rays.forEach(r=>{if(!r.alive)r.trail.shift();});
+    rays=rays.filter(r=>r.alive||r.trail.length>1);
+    // central body
+    if(blackhole){
+      glow(ctx,cx,cy,rs*3,'rgba(255,150,40,.5)');
+      // photon ring
+      ctx.strokeStyle='rgba(255,180,80,.9)';ctx.lineWidth=3;ctx.beginPath();ctx.arc(cx,cy,rs*1.5,0,7);ctx.stroke();
+      ctx.fillStyle='#000';ctx.beginPath();ctx.arc(cx,cy,rs*1.4,0,7);ctx.fill();
+      ctx.fillStyle='#99a2d6';ctx.font='12px sans-serif';ctx.textAlign='center';
+      ctx.fillText('事象の地平面（光も逃げられない）',cx,cy+rs*2.6);ctx.textAlign='left';
+    }else{
+      const pr=Math.min(w,h)*0.05*(0.6+mass*0.25);
+      glow(ctx,cx,cy,pr*2.4,'rgba(255,210,90,.4)');
+      const g=ctx.createRadialGradient(cx,cy,2,cx,cy,pr);
+      g.addColorStop(0,'#fff6c8');g.addColorStop(.5,'#ffd166');g.addColorStop(1,'#d98a16');
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,pr,0,7);ctx.fill();
+      // orbiting planet
+      ang+=dt*(0.4+mass*0.18);const oR=Math.min(w,h)*0.33;
+      const planX=cx+Math.cos(ang)*oR,planY=cy+Math.sin(ang)*oR*0.62+depth(cx,cy)*0-mass*8;
+      ctx.strokeStyle='rgba(124,255,178,.2)';ctx.beginPath();ctx.ellipse(cx,cy-mass*8,oR,oR*0.62,0,0,7);ctx.stroke();
+      glow(ctx,planX,planY,9,'rgba(124,255,178,.7)');ctx.fillStyle='#7CFFB2';ctx.beginPath();ctx.arc(planX,planY,7,0,7);ctx.fill();
+    }
+    stats.set('m','質量',mass.toFixed(1)+(blackhole?' ☠':''));
+    stats.set('lens','光の曲がり',mass<0.2?'なし':blackhole?'飲み込む':'曲がる（レンズ）');
+    rd(n,blackhole?'質量が極限に達すると、光すら脱出できない「ブラックホール」になる':
+      mass<0.2?'質量ほぼゼロ：時空は平らで、光はまっすぐ進む':'重い天体が時空をへこませ、光も惑星もその斜面に沿って曲がる');
+  });
+};
+
+/* ---- 第8章：量子 坂vs階段 ---- */
+SIMS.quantum=function(wrap,n){
+  const {cv,ctx}=makeStage(wrap);const ctrl=controls(wrap);const stats=statBar(wrap);
+  let cy=0,qLevel=0,photon=null,snap=0; // classic height 0..1
+  button(ctrl,'光のかたまり（量子）を当てる',null,()=>{photon={p:0};});
+  button(ctrl,'リセット','ghost',()=>{cy=0;qLevel=0;});
+  // classic: drag to set continuous height
+  let dragClassic=false;
+  cv.addEventListener('pointerdown',e=>{const p=pointerPos(cv,e);if(p.x<cv._w*0.5)dragClassic=true;});
+  cv.addEventListener('pointermove',e=>{if(dragClassic){const p=pointerPos(cv,e);
+    cy=Math.max(0,Math.min(1,1-(p.y-cv._h*0.15)/(cv._h*0.65)));}});
+  cv.addEventListener('pointerup',()=>dragClassic=false);
+  const steps=5;
+  loop(n,(dt)=>{const w=cv._w,h=cv._h;ctx.fillStyle='#060a1c';ctx.fillRect(0,0,w,h);
+    const top=h*0.15,bot=h*0.8,L=bot-top;
+    ctx.strokeStyle='#272d55';ctx.beginPath();ctx.moveTo(w/2,0);ctx.lineTo(w/2,h);ctx.stroke();
+    // ---- classic ramp ----
+    const rx0=w*0.08,rx1=w*0.42;
+    ctx.strokeStyle='#5fd6ff';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(rx0,bot);ctx.lineTo(rx1,top);ctx.stroke();
+    const cbx=rx0+(rx1-rx0)*cy,cby=bot-L*cy;
+    glow(ctx,cbx,cby-12,14,'rgba(124,255,178,.6)');ctx.fillStyle='#7CFFB2';ctx.beginPath();ctx.arc(cbx,cby-12,12,0,7);ctx.fill();
+    ctx.fillStyle='#9aa3d4';ctx.font='13px sans-serif';ctx.textAlign='center';
+    ctx.fillText('古典：どの高さにも止まれる',w*0.25,h*0.93);
+    ctx.fillText('(ドラッグで動かせる)',w*0.25,h*0.97);
+    // ---- quantum stairs ----
+    const sx0=w*0.58,sx1=w*0.92;
+    ctx.strokeStyle='#ff7eb6';ctx.lineWidth=4;
+    for(let i=0;i<steps;i++){const y0=bot-L*i/steps,y1=bot-L*(i+1)/steps;
+      const x0=sx0+(sx1-sx0)*i/steps,x1=sx0+(sx1-sx0)*(i+1)/steps;
+      ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y0);ctx.lineTo(x1,y1);ctx.stroke();
+      // level marker
+      ctx.fillStyle='rgba(255,126,182,.15)';ctx.fillRect(x0,y0-3,(sx1-sx0)/steps,3);}
+    // photon climbing
+    if(photon){photon.p+=dt*2.5;if(photon.p>=1){photon=null;if(qLevel<steps-1){qLevel++;snap=1;}}}
+    if(photon){const fx=sx0-30+(sx0-30)*0;const px=10+photon.p*(sx0-20);
+      glow(ctx,px,top+20,10,'rgba(255,232,59,.8)');ctx.fillStyle='#ffe83b';ctx.beginPath();ctx.arc(px,top+20,5,0,7);ctx.fill();}
+    snap=Math.max(0,snap-dt*2);
+    const lvl=qLevel;const qx=sx0+(sx1-sx0)*(lvl+0.5)/steps,qy=bot-L*lvl/steps;
+    glow(ctx,qx,qy-12-snap*8,14,'rgba(255,126,182,.6)');ctx.fillStyle='#ff7eb6';ctx.beginPath();ctx.arc(qx,qy-12,12,0,7);ctx.fill();
+    ctx.fillStyle='#9aa3d4';ctx.fillText('量子：決まった段だけ',w*0.75,h*0.93);
+    ctx.fillText('中間には存在できない！',w*0.75,h*0.97);ctx.textAlign='left';
+    stats.set('c','古典の高さ',(cy*100).toFixed(0)+'%（連続）','#7CFFB2');
+    stats.set('q','量子の準位','n = '+(qLevel+1)+' / '+steps,'#ff7eb6');
+    rd(n,'古典物理はどんな値も取れる（連続）。量子の世界はトビトビ＝決まったエネルギーの段しか存在できない');
+  });
+};
+
+/* ---- 第9章：ボーア 水素スペクトル ---- */
+SIMS.bohr=function(wrap,n){
+  const {cv,ctx}=makeStage(wrap);const ctrl=controls(wrap);const stats=statBar(wrap);
+  let scaled=false,level=0,ang=0,emit=[],spectrum=[],decay=0;
+  toggle(ctrl,[{label:'原子モデル',val:false},{label:'本当のスケール',val:true}],v=>scaled=v);
+  button(ctrl,'スペクトルを消す','ghost',()=>spectrum=[]);
+  const levels=[0,1,2,3];
+  // click ring to excite
+  cv.addEventListener('pointerdown',e=>{if(scaled)return;const p=pointerPos(cv,e);const w=cv._w,h=cv._h,cx=w/2,cy=h/2;
+    const d=Math.hypot(p.x-cx,p.y-cy);const radii=[0.13,0.23,0.34,0.45].map(r=>Math.min(w,h)*r);
+    for(let i=radii.length-1;i>=1;i--){if(Math.abs(d-radii[i])<24){level=i;decay=0;break;}}});
+  function emitPhoton(ni,nf){const R=1.097e-2;const inv=R*(1/(nf*nf)-1/(ni*ni));const wl=Math.abs(1/inv)*1e0; // nm-ish scaled
+    // proper: 1/lambda(nm) = 1.097e7 * (...)  in m^-1 -> nm
+    const lam=1/(1.097e-2*(1/(nf*nf)-1/(ni*ni)))* -1; // negative since emission
+    const wlnm=1/(1.097e7*(1/(nf*nf)-1/(ni*ni)))*1e9*-1;
+    const realwl=Math.abs(1/(1.097e7*(1/(nf*nf)-1/(ni*ni))))*1e9;
+    spectrum.push({wl:realwl});if(spectrum.length>40)spectrum.shift();
+    emit.push({r:0,wl:realwl});}
+  loop(n,(dt,t)=>{const w=cv._w,h=cv._h,cx=w/2,cy=h/2;ctx.fillStyle='#03040c';ctx.fillRect(0,0,w,h);
+    ang+=dt*(1.8-level*0.35);
+    if(level>0){decay+=dt;if(decay>2.2){const from=level;level--;decay=0;emitPhoton(from+1,level+1);}}
+    if(scaled){
+      ctx.fillStyle='#ffd166';ctx.beginPath();ctx.arc(cx,cy,3,0,7);ctx.fill();
+      ctx.fillStyle='#9aa3d4';ctx.font='12px sans-serif';ctx.textAlign='center';
+      ctx.fillText('原子核（1円玉サイズ）',cx,cy+20);
+      const Rr=Math.min(w,h)*0.45;ctx.strokeStyle='rgba(95,214,255,.25)';ctx.beginPath();ctx.arc(cx,cy,Rr,0,7);ctx.stroke();
+      const ex=cx+Math.cos(ang)*Rr,ey=cy+Math.sin(ang)*Rr*0.7;
+      glow(ctx,ex,ey,8,'rgba(95,214,255,.7)');ctx.fillStyle='#5fd6ff';ctx.beginPath();ctx.arc(ex,ey,5,0,7);ctx.fill();
+      ctx.fillText('電子（1km先のサッカー場の端）',ex,ey-12);
+      ctx.fillStyle='#5b6299';ctx.fillText('← この間はぜんぶ「空っぽの空間」 →',cx,cy-Rr-8);ctx.textAlign='left';
+      rd(n,'原子の中身は99.99%以上が空っぽ。それでも壁をすり抜けないのは量子的な反発のおかげ');
+    }else{
+      const radii=[0.13,0.23,0.34,0.45].map(r=>Math.min(w,h)*r);
+      radii.forEach((R,i)=>{ctx.strokeStyle=i===level?'#ffe83b':(i===0?'rgba(95,214,255,.3)':'rgba(95,214,255,.18)');
+        ctx.lineWidth=i===level?2.5:1;ctx.beginPath();ctx.arc(cx,cy,R,0,7);ctx.stroke();
+        if(i>0){ctx.fillStyle='rgba(153,162,214,.5)';ctx.font='10px sans-serif';ctx.fillText('n='+(i+1),cx+R-14,cy-4);}});
+      glow(ctx,cx,cy,22,'rgba(255,126,182,.5)');
+      const ng=ctx.createRadialGradient(cx,cy,2,cx,cy,15);ng.addColorStop(0,'#fff');ng.addColorStop(1,'#ff7eb6');
+      ctx.fillStyle=ng;ctx.beginPath();ctx.arc(cx,cy,15,0,7);ctx.fill();
+      ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillText('+',cx,cy+4);ctx.textAlign='left';
+      const R=radii[level],ex=cx+Math.cos(ang)*R,ey=cy+Math.sin(ang)*R;
+      glow(ctx,ex,ey,12,'rgba(95,214,255,.7)');ctx.fillStyle='#5fd6ff';ctx.beginPath();ctx.arc(ex,ey,8,0,7);ctx.fill();
+      // photons radiating
+      for(const p of emit){p.r+=dt*180;const rgb=nmToRGB(p.wl);
+        ctx.strokeStyle='rgba('+rgb.join(',')+','+Math.max(0,1-p.r/220)+')';ctx.lineWidth=2.5;
+        ctx.beginPath();ctx.arc(cx,cy,p.r,0,7);ctx.stroke();}
+      emit=emit.filter(p=>p.r<220);
+      ctx.fillStyle='#9aa3d4';ctx.font='12px sans-serif';ctx.textAlign='center';
+      ctx.fillText('外側のリングをクリックして電子を励起→戻るとき発光',cx,h-50);ctx.textAlign='left';
+      rd(n,level>0?'電子が外側の軌道へジャンプ（吸収）。戻るとき、その差のエネルギーを「色のついた光」として放つ':
+        '外側のリングをクリックすると電子が励起され、戻るときに光（スペクトル線）を放つ');
+    }
+    // スペクトル帯（波長nmの目盛り付き）
+    const sy=h-32,sx0=w*0.05,sw=w*0.9;
+    ctx.fillStyle='#000';ctx.fillRect(sx0,sy,sw,12);
+    for(let i=0;i<sw;i+=2){const wl=400+i/sw*(700-400);const rgb=nmToRGB(wl);
+      ctx.fillStyle='rgba('+rgb.join(',')+',.18)';ctx.fillRect(sx0+i,sy,2,12);}
+    for(const s of spectrum){if(s.wl>=380&&s.wl<=720){const xx=sx0+(s.wl-400)/(700-400)*sw;const rgb=nmToRGB(s.wl);
+      ctx.fillStyle='rgb('+rgb.join(',')+')';ctx.fillRect(xx-1.5,sy-2,3,16);}}
+    ctx.strokeStyle='#272d55';ctx.strokeRect(sx0,sy,sw,12);
+    ctx.font='9px sans-serif';ctx.textAlign='center';
+    for(let wl=400;wl<=700;wl+=50){const xx=sx0+(wl-400)/300*sw;
+      ctx.strokeStyle='rgba(153,162,214,.4)';ctx.beginPath();ctx.moveTo(xx,sy+12);ctx.lineTo(xx,sy+15);ctx.stroke();
+      ctx.fillStyle='rgba(153,162,214,.85)';ctx.fillText(wl,xx,sy+24);}
+    ctx.textAlign='left';ctx.fillStyle='rgba(153,162,214,.85)';ctx.fillText('波長(nm)',sx0,sy-3);
+    stats.set('lvl','電子の軌道','n = '+(level+1));
+    stats.set('lines','記録した輝線',spectrum.length+' 本','#ffd166');
+  });
+};
+
+/* ---- 第10章：二重スリット ---- */
+SIMS.doubleslit=function(wrap,n){
+  const {cv,ctx}=makeStage(wrap);const ctrl=controls(wrap);const stats=statBar(wrap);
+  let observe=false,hits=[],beams=[],acc=0,fired=0,running2=true;
+  toggle(ctrl,[{label:'観測しない（波）',val:false},{label:'観測する 👁（粒）',val:true}],v=>{observe=v;hits=[];fired=0;});
+  button(ctrl,'発射/停止','ghost',()=>running2=!running2);
+  button(ctrl,'クリア','ghost',()=>{hits=[];fired=0;});
+  function intensity(yn){ // yn normalized -0.5..0.5
+    const d=14,phase=Math.cos(yn*Math.PI*d);const env=Math.pow(Math.cos(yn*Math.PI*3),2);
+    return phase*phase*Math.max(0,env);}
+  loop(n,(dt)=>{const w=cv._w,h=cv._h;ctx.fillStyle='#03040c';ctx.fillRect(0,0,w,h);
+    const slitX=w*0.42,screenX=w*0.86,gunX=w*0.06;const s1=h*0.42,s2=h*0.58,gap=12;
+    // wave animation backdrop (only when not observing)
+    if(!observe){ctx.globalAlpha=0.5;for(let i=0;i<2;i++){const sy=i?s2:s1;
+      for(let r=10;r<w;r+=22){const tt=(performance.now()/600)%1;const rr=(r+tt*22);
+        ctx.strokeStyle='rgba(95,214,255,'+Math.max(0,0.12-(rr/w)*0.12)+')';ctx.lineWidth=1;
+        ctx.beginPath();ctx.arc(slitX,sy,rr,-1.0,1.0);ctx.stroke();}}ctx.globalAlpha=1;}
+    // barrier
+    ctx.fillStyle='#2a3570';ctx.fillRect(slitX-4,0,8,s1-gap);
+    ctx.fillRect(slitX-4,s1+gap,8,(s2-gap)-(s1+gap));ctx.fillRect(slitX-4,s2+gap,8,h-(s2+gap));
+    // screen
+    ctx.fillStyle='#0e1330';ctx.fillRect(screenX,0,6,h);
+    // emit electrons
+    acc+=dt;if(running2&&acc>0.04){acc=0;beams.push({x:gunX,y:h*0.5+(Math.random()-.5)*6,vx:300,passed:false});}
+    for(const b of beams){b.x+=b.vx*dt;
+      if(!b.passed&&b.x>=slitX){b.passed=true;b.slit=Math.random()<0.5?s1:s2;b.y=b.slit;
+        b.vy=(Math.random()-0.5)*(observe?60:300);}
+      b.y+=(b.vy||0)*dt;
+      ctx.fillStyle=observe?'#ff7eb6':'#5fd6ff';ctx.beginPath();ctx.arc(b.x,b.y,2.5,0,7);ctx.fill();
+      if(b.x>=screenX){let y;
+        if(observe){y=b.slit+(Math.random()-0.5)*70;}
+        else{let yy,ok=false;for(let k=0;k<15;k++){yy=Math.random()*h;
+          if(Math.random()<intensity((yy-h/2)/h)){ok=true;break;}}if(!ok)yy=h/2+(Math.random()-.5)*h;y=yy;}
+        hits.push(y);if(hits.length>2000)hits.shift();fired++;b.dead=true;}}
+    beams=beams.filter(b=>!b.dead&&b.x<w);
+    // draw hits
+    for(const y of hits){ctx.fillStyle=observe?'rgba(255,126,182,.45)':'rgba(95,214,255,.45)';
+      ctx.fillRect(screenX+8,y-1,28,2);}
+    // gun
+    ctx.fillStyle='#555c8a';ctx.fillRect(gunX-14,h*0.5-8,18,16);
+    ctx.fillStyle='#99a2d6';ctx.font='12px sans-serif';
+    ctx.fillText('電子銃',gunX-14,h*0.5-14);ctx.fillText('二重スリット',slitX-26,h-8);ctx.fillText('スクリーン',screenX-30,16);
+    ctx.fillStyle=observe?'#ff7eb6':'#5fd6ff';ctx.font='13px sans-serif';
+    ctx.fillText(observe?'👁 観測中：2本の帯（粒として振る舞う）':'干渉縞：波として両方の穴を同時に通った',screenX-340,h-26);
+    stats.set('mode','状態',observe?'観測あり（粒）':'観測なし（波）',observe?'#ff7eb6':'#5fd6ff');
+    stats.set('cnt','発射した電子',fired+' 個');
+    rd(n,observe?'観測した瞬間に重ね合わせが壊れ、しま模様が消えて2本の帯になる':
+      '1個ずつでも、数百個たまると波の干渉縞が現れる＝電子は両方の穴を同時に通っている');
+  });
+};
+
+/* ---- 第11章：コペンハーゲン ネットワーク ---- */
+SIMS.copenhagen=function(wrap,n){
+  const {cv,ctx}=makeStage(wrap);const ctrl=controls(wrap);const stats=statBar(wrap);
+  const names=['仁科','湯川','朝永','坂田','学生A','学生B','学生C','学生D'];
+  let nodes=[],drag=null,pulses=[],ideas=0;
+  button(ctrl,'ランダムに配置','ghost',()=>init());
+  function init(){const w=cv._w,h=cv._h;nodes=names.map((nm,i)=>{const a=i/names.length*7;
+    return{nm,x:w/2+Math.cos(a)*w*0.3,y:h/2+Math.sin(a)*h*0.32,
+      vx:(Math.random()-.5)*22,vy:(Math.random()-.5)*22,r:nm==='仁科'?22:15,lit:0};});}
+  cv.addEventListener('pointerdown',e=>{const p=pointerPos(cv,e);
+    for(const nd of nodes)if(Math.hypot(nd.x-p.x,nd.y-p.y)<nd.r+6){drag=nd;return;}
+    // click empty -> nearest emits idea
+    let best=null,bd=1e9;for(const nd of nodes){const d=Math.hypot(nd.x-p.x,nd.y-p.y);if(d<bd){bd=d;best=nd;}}
+    if(best)spread(best);});
+  cv.addEventListener('pointermove',e=>{if(drag){const p=pointerPos(cv,e);drag.x=p.x;drag.y=p.y;drag.vx=0;drag.vy=0;}});
+  cv.addEventListener('pointerup',e=>{if(drag){const moved=true;}drag=null;});
+  function spread(from){ideas++;from.lit=1;for(const nd of nodes)if(nd!==from)
+    pulses.push({a:from,b:nd,p:0});}
+  loop(n,(dt)=>{const w=cv._w,h=cv._h;if(!nodes.length)init();
+    ctx.fillStyle='#070a1c';ctx.fillRect(0,0,w,h);
+    // hut
+    ctx.fillStyle='#0b1130';ctx.fillRect(w*0.05,h*0.14,w*0.9,h*0.74);
+    ctx.fillStyle='#1a2148';ctx.beginPath();ctx.moveTo(w*0.03,h*0.14);ctx.lineTo(w/2,h*0.03);ctx.lineTo(w*0.97,h*0.14);ctx.fill();
+    ctx.strokeStyle='#272d55';ctx.strokeRect(w*0.05,h*0.14,w*0.9,h*0.74);
+    // edges
+    for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){const a=nodes[i],b=nodes[j];
+      ctx.strokeStyle='rgba(95,214,255,.12)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}
+    // pulses
+    for(const ps of pulses){ps.p+=dt*1.6;const x=ps.a.x+(ps.b.x-ps.a.x)*ps.p,y=ps.a.y+(ps.b.y-ps.a.y)*ps.p;
+      glow(ctx,x,y,8,'rgba(255,232,59,.8)');if(ps.p>=1){ps.b.lit=1;ps.done=true;}}
+    pulses=pulses.filter(p=>!p.done);
+    // move + draw nodes
+    for(const nd of nodes){if(nd!==drag){nd.x+=nd.vx*dt;nd.y+=nd.vy*dt;
+      if(nd.x<w*0.09||nd.x>w*0.91)nd.vx*=-1;if(nd.y<h*0.2||nd.y>h*0.84)nd.vy*=-1;}
+      nd.lit=Math.max(0,nd.lit-dt*0.8);
+      if(nd.lit>0)glow(ctx,nd.x,nd.y,nd.r+nd.lit*16,'rgba(255,232,59,'+nd.lit*0.5+')');
+      ctx.fillStyle=nd.nm==='仁科'?'#ffd166':'#5fd6ff';ctx.beginPath();ctx.arc(nd.x,nd.y,nd.r,0,7);ctx.fill();
+      ctx.fillStyle='#04111a';ctx.font='bold 12px sans-serif';ctx.textAlign='center';
+      ctx.fillText(nd.nm,nd.x,nd.y+4);ctx.textAlign='left';}
+    ctx.fillStyle='#99a2d6';ctx.font='12px sans-serif';
+    ctx.fillText('理研の小屋：誰かをクリックするとアイデアが全員に伝わる（点はドラッグ可）',w*0.07,h*0.11);
+    stats.set('id','生まれた議論',ideas+' 回','#ffd166');stats.set('flat','構造','上下関係なし');
+    rd(n,'誰からでもアイデアを発信でき、対等に全員へ伝わる――これがコペンハーゲン精神');
+  });
+};
+
+/* ---- 第12章：核力 湯川ポテンシャル ---- */
+SIMS.meson=function(wrap,n){
+  const {cv,ctx}=makeStage(wrap);const ctrl=controls(wrap);const stats=statBar(wrap);
+  let sep=80,vp=0,mesons=[],acc=0,dragP=null,broken=false,lambda=55;
+  slider(ctrl,'中間子の到達距離 λ',20,90,55,1,v=>{lambda=v;return v+' fm';});
+  button(ctrl,'結合をリセット','ghost',()=>{sep=80;vp=0;broken=false;});
+  // drag proton apart
+  cv.addEventListener('pointerdown',e=>{const p=pointerPos(cv,e);const w=cv._w,h=cv._h;
+    const pX=w/2-sep/2;if(Math.abs(p.x-pX)<40&&Math.abs(p.y-h/2)<40)dragP=true;});
+  cv.addEventListener('pointermove',e=>{if(dragP){const p=pointerPos(cv,e);sep=Math.max(20,Math.min(cv._w*0.7,(cv._w/2-p.x)*2));}});
+  cv.addEventListener('pointerup',()=>dragP=false);
+  loop(n,(dt,t)=>{const w=cv._w,h=cv._h,cy=h/2;ctx.fillStyle='#03040c';ctx.fillRect(0,0,w,h);
+    // yukawa force: F ~ -(1+r/λ)e^{-r/λ}/r^2 (attractive), plus short-range repulsion
+    const rfm=sep*0.5;
+    if(!dragP&&!broken){const r=sep;const att=300*Math.exp(-r/lambda)*(1/(r*0.05+1));
+      const rep=sep<46?(46-sep)*40:0;const F=att-rep;vp+=(-F)*dt;vp*=0.9;sep+=vp*dt;
+      sep=Math.max(20,sep);if(sep>w*0.75){broken=true;}}
+    const pX=w/2-sep/2,nX=w/2+sep/2;
+    // potential well graph (bottom)
+    const gx0=w*0.08,gx1=w*0.92,gy=h*0.82,gh=h*0.28;
+    ctx.strokeStyle='#272d55';ctx.beginPath();ctx.moveTo(gx0,gy-gh*0.5);ctx.lineTo(gx1,gy-gh*0.5);ctx.stroke();
+    ctx.strokeStyle='#7CFFB2';ctx.lineWidth=2;ctx.beginPath();
+    for(let i=0;i<=100;i++){const rr=20+i/100*(w*0.7-20);const V=-300*Math.exp(-rr/lambda)/(rr*0.04+1)+ (rr<46?(46-rr)*8:0);
+      const xx=gx0+i/100*(gx1-gx0);const yy=gy-gh*0.5-V*0.12;i===0?ctx.moveTo(xx,yy):ctx.lineTo(xx,yy);}ctx.stroke();
+    // marker of current sep on curve
+    const mi=(sep-20)/(w*0.7-20);const mxk=gx0+Math.min(1,mi)*(gx1-gx0);
+    ctx.fillStyle='#ffd166';ctx.beginPath();ctx.arc(mxk,gy-gh*0.5+ (sep<46?-6:8),5,0,7);ctx.fill();
+    ctx.fillStyle='#99a2d6';ctx.font='11px sans-serif';ctx.fillText('湯川ポテンシャル（核力の井戸）',gx0,gy-gh*0.5-gh*0.5-4>0?gx0&&12:12);
+    ctx.strokeStyle='rgba(153,162,214,.3)';ctx.lineWidth=1;
+    for(let i=0;i<=5;i++){const xx=gx0+i/5*(gx1-gx0);ctx.beginPath();ctx.moveTo(xx,gy-gh*0.5);ctx.lineTo(xx,gy-gh*0.5+4);ctx.stroke();}
+    ctx.fillText('近い ←   核子の距離   → 遠い',gx0,gy+gh*0.15);
+    // bond glow
+    if(!broken){ctx.strokeStyle='rgba(124,255,178,'+Math.min(.6,Math.exp(-sep/lambda)+0.1)+')';
+      ctx.lineWidth=2+Math.exp(-sep/lambda)*6;ctx.beginPath();ctx.moveTo(pX,cy);ctx.lineTo(nX,cy);ctx.stroke();}
+    // mesons
+    acc+=dt*(broken?0:Math.exp(-sep/lambda)*4+0.3);if(acc>0.4&&!broken){acc=0;
+      mesons.push({from:Math.random()<.5?1:-1,p:0});}
+    for(const m of mesons){m.p+=dt*2.2;const a=m.from>0?pX:nX,b=m.from>0?nX:pX;
+      const x=a+(b-a)*m.p,arc=Math.sin(m.p*Math.PI)*36;
+      glow(ctx,x,cy-arc,8,'rgba(255,232,59,.7)');ctx.fillStyle='#ffe83b';ctx.beginPath();ctx.arc(x,cy-arc,6,0,7);ctx.fill();}
+    mesons=mesons.filter(m=>m.p<1);
+    // nucleons
+    function nuc(x,c,lab){glow(ctx,x,cy,30,'rgba('+c+',.3)');
+      const g=ctx.createRadialGradient(x-7,cy-7,3,x,cy,26);g.addColorStop(0,'#fff');g.addColorStop(1,'rgb('+c+')');
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,cy,24,0,7);ctx.fill();
+      ctx.fillStyle='#fff';ctx.font='bold 14px sans-serif';ctx.textAlign='center';ctx.fillText(lab,x,cy+5);ctx.textAlign='left';}
+    nuc(pX,'255,90,122','p+');nuc(nX,'95,214,255','n');
+    stats.set('sep','核子の距離',Math.round(sep)+' fm');
+    stats.set('bond','結合',broken?'分裂！':sep<60?'強い':'弱い',broken?'#ff7eb6':'#7CFFB2');
+    rd(n,broken?'引き離しすぎた！ 核力は短距離力なので、遠ざかると急に効かなくなり原子核は分裂する':
+      '中間子のキャッチボールが「核力」を生む。近いほど強烈に引き合うが、離れると急に弱まる（ドラッグで実感）');
+  });
+};
+
+/* ---- 第13章：ヒッグス場 ---- */
+SIMS.higgs=function(wrap,n){
+  const {cv,ctx}=makeStage(wrap);const ctrl=controls(wrap);const stats=statBar(wrap);
+  let density=1,heavy={x:.3,y:.4,vx:60,vy:20},photon={x:0,y:.72},drag=false,field=[];
+  slider(ctrl,'ヒッグス場の濃さ',0,3,1,0.1,v=>{density=v;return v.toFixed(1)+'×';});
+  cv.addEventListener('pointerdown',e=>{const p=pointerPos(cv,e);if(Math.hypot(p.x-heavy.x*cv._w,p.y-heavy.y*cv._h)<30)drag=true;});
+  cv.addEventListener('pointermove',e=>{if(drag){const p=pointerPos(cv,e);
+    heavy.vx=(p.x/cv._w-heavy.x)*600;heavy.vy=(p.y/cv._h-heavy.y)*600;heavy.x=p.x/cv._w;heavy.y=p.y/cv._h;}});
+  cv.addEventListener('pointerup',()=>drag=false);
+  function initField(){field=[];for(let i=0;i<140;i++)field.push({x:Math.random(),y:Math.random(),ph:Math.random()*7});}
+  loop(n,(dt,t)=>{const w=cv._w,h=cv._h;if(!field.length)initField();ctx.fillStyle='#04030c';ctx.fillRect(0,0,w,h);
+    // field dots
+    for(const f of field){const a=0.1+0.12*Math.sin(t*1.5+f.ph);
+      ctx.fillStyle='rgba(150,90,255,'+(a*density)+')';ctx.beginPath();ctx.arc(f.x*w,f.y*h,2.5+density*0.6,0,7);ctx.fill();}
+    ctx.fillStyle='rgba(110,60,200,'+(0.03+density*0.04)+')';ctx.fillRect(0,0,w,h);
+    // heavy particle: drag through field, gets resistance
+    if(!drag){const k=density*1.4+0.3;heavy.vx-=heavy.vx*k*dt;heavy.vy-=heavy.vy*k*dt;
+      heavy.x+=heavy.vx/w*dt;heavy.y+=heavy.vy/h*dt;
+      if(heavy.x<0.05||heavy.x>0.95)heavy.vx*=-1;if(heavy.y<0.1||heavy.y>0.9)heavy.vy*=-1;
+      heavy.x=Math.max(0.05,Math.min(0.95,heavy.x));heavy.y=Math.max(0.1,Math.min(0.9,heavy.y));}
+    const hx=heavy.x*w,hy=heavy.y*h;
+    // wake ripples
+    const spd=Math.hypot(heavy.vx,heavy.vy);
+    for(let r=1;r<=3;r++){ctx.strokeStyle='rgba(255,126,182,'+(0.25*density)+')';ctx.lineWidth=1;
+      ctx.beginPath();ctx.arc(hx,hy,16+r*6*density,0,7);ctx.stroke();}
+    glow(ctx,hx,hy,22,'rgba(255,126,182,.5)');ctx.fillStyle='#ff7eb6';ctx.beginPath();ctx.arc(hx,hy,15,0,7);ctx.fill();
+    ctx.fillStyle='#fff';ctx.font='11px sans-serif';ctx.textAlign='center';ctx.fillText('質量を持つ粒子',hx,hy-24);ctx.textAlign='left';
+    // photon zips through unaffected
+    photon.x+=0.5*dt;if(photon.x>1)photon.x=0;const px=photon.x*w,py=photon.y*h;
+    glow(ctx,px,py,14,'rgba(255,232,59,.8)');ctx.fillStyle='#ffe83b';ctx.beginPath();ctx.arc(px,py,10,0,7);ctx.fill();
+    ctx.fillStyle='#ffe83b';ctx.font='12px sans-serif';ctx.fillText('光子：場を素通り＝質量ゼロ',px-50,py-18);
+    const mass=density*1.2;
+    stats.set('d','場の濃さ',density.toFixed(1)+'×','#b58bff');
+    stats.set('m','粒子の重さ',mass<0.2?'ほぼゼロ':mass.toFixed(1),'#ff7eb6');
+    rd(n,density<0.1?'ヒッグス場ゼロ：すべての粒子は抵抗なく動く＝質量なし（光速）':
+      '場が濃いほど粒子はまとわりつかれ、動かしにくく＝重くなる。これが質量の正体（ドラッグで体感）');
+  });
+};
+
+/* ---- 第14章：ビッグバン タイムライン ---- */
+SIMS.bigbang=function(wrap,n){
+  const {cv,ctx}=makeStage(wrap);const ctrl=controls(wrap);const stats=statBar(wrap);
+  let T=0,playing=false,parts=[];
+  const epochs=[
+    {t:0.0,name:'特異点',temp:'∞',desc:'宇宙のすべてが一点に'},
+    {t:0.05,name:'インフレーション',temp:'10²⁷℃',desc:'一瞬で猛烈に膨張'},
+    {t:0.18,name:'クォークスープ',temp:'10¹²℃',desc:'素粒子が飛び交う灼熱'},
+    {t:0.32,name:'原子核の誕生',temp:'10⁹℃',desc:'陽子と中性子が結合'},
+    {t:0.5,name:'宇宙の晴れ上がり',temp:'3000℃',desc:'原子ができ、光が直進開始'},
+    {t:0.68,name:'最初の星',temp:'-200℃',desc:'重力でガスが集まり点火'},
+    {t:0.85,name:'銀河と超新星',temp:'-260℃',desc:'星が爆発し元素をばらまく'},
+    {t:1.0,name:'現在（138億年）',temp:'-270℃',desc:'君がここにいる'}
+  ];
+  const sl=slider(ctrl,'宇宙の時間',0,1,0,0.001,v=>{T=v;playing=false;return (v*13.8).toFixed(1)+' 億年×10';});
+  button(ctrl,'▶ 自動再生',null,()=>{playing=true;if(T>=1)T=0;});
+  button(ctrl,'⏸ 停止','ghost',()=>playing=false);
+  function curEpoch(){let e=epochs[0];for(const ep of epochs)if(T>=ep.t)e=ep;return e;}
+  loop(n,(dt)=>{const w=cv._w,h=cv._h,cx=w/2,cy=h*0.42;
+    if(playing){T+=dt*0.12;if(T>=1){T=1;playing=false;}sl.value=T;}
+    // background color by temperature (hot->cold)
+    const heat=Math.max(0,1-T*1.3);
+    ctx.fillStyle='rgb('+Math.round(8+heat*40)+','+Math.round(6+heat*10)+','+Math.round(14+heat*30)+')';
+    ctx.fillRect(0,0,w,h);
+    const radius=Math.min(w,h)*0.42;
+    // expanding sphere of stuff
+    const R=radius*(0.05+T*0.95);
+    if(parts.length===0)for(let i=0;i<260;i++){const a=Math.random()*7,rr=Math.random();
+      parts.push({a,rr,tw:Math.random()*7});}
+    // clip to circle
+    ctx.save();ctx.beginPath();ctx.arc(cx,cy,R,0,7);ctx.clip();
+    glow(ctx,cx,cy,R,'rgba('+Math.round(60+heat*195)+','+Math.round(40+heat*150)+',120,'+(0.15+heat*0.4)+')');
+    for(const p of parts){const x=cx+Math.cos(p.a)*p.rr*R,y=cy+Math.sin(p.a)*p.rr*R;
+      let col,sz;
+      if(T<0.18){col='rgba(255,'+Math.round(200-T*300)+',120,.9)';sz=2;} // plasma
+      else if(T<0.5){col='rgba(255,180,120,.8)';sz=1.8;}
+      else{const tw=2+Math.sin(performance.now()/400+p.tw)*1.2;col='rgba(255,250,210,.95)';sz=Math.max(1,tw);}
+      ctx.fillStyle=col;ctx.beginPath();ctx.arc(x,y,sz,0,7);ctx.fill();}
+    // supernova flashes after 0.8
+    if(T>0.8){for(let i=0;i<3;i++){const a=(performance.now()/700+i*2.1)%7;const rr=0.5+0.4*Math.sin(performance.now()/500+i);
+      const x=cx+Math.cos(a)*rr*R,y=cy+Math.sin(a)*rr*R;
+      glow(ctx,x,y,14,'rgba(255,200,120,.6)');}}
+    ctx.restore();
+    ctx.strokeStyle='rgba(95,214,255,.3)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(cx,cy,R,0,7);ctx.stroke();
+    // timeline bar
+    const by=h-26,bx0=20,bw=w-40;
+    ctx.fillStyle='#0a0e26';ctx.fillRect(bx0,by,bw,10);
+    ctx.fillStyle='#ff7eb6';ctx.fillRect(bx0,by,bw*T,10);
+    epochs.forEach(ep=>{const x=bx0+ep.t*bw;ctx.fillStyle=T>=ep.t?'#ffd166':'#3a3f66';
+      ctx.beginPath();ctx.arc(x,by+5,3,0,7);ctx.fill();});
+    ctx.font='9px sans-serif';ctx.fillStyle='rgba(153,162,214,.85)';ctx.textAlign='left';
+    ctx.fillText('ビッグバン',bx0,by-4);ctx.textAlign='right';ctx.fillText('現在 138億年',bx0+bw,by-4);ctx.textAlign='left';
+    const e=curEpoch();
+    ctx.fillStyle='#fff';ctx.font='bold 16px sans-serif';ctx.textAlign='center';
+    ctx.fillText(e.name,cx,cy-R-14>20?cy-R-14:18);
+    ctx.font='13px sans-serif';ctx.fillStyle='#ffd166';ctx.fillText(e.desc,cx,h-44);ctx.textAlign='left';
+    stats.set('ep','時代',e.name,'#ffd166');stats.set('temp','宇宙の温度',e.temp,'#ff7eb6');
+    stats.set('age','経過',(T*13.8).toFixed(1)+'億年×10');
+    rd(n,'宇宙は冷えながら膨張し、素粒子→原子→星→銀河へと姿を変えた。君の体は、爆発した星のかけらでできている');
+  });
+};
+
+/* ---- 第15章：ダークユニバース ---- */
+SIMS.darkuniverse=function(wrap,n){
+  const {cv,ctx}=makeStage(wrap);const ctrl=controls(wrap);const stats=statBar(wrap);
+  const data=[
+    {lab:'ダークエネルギー',v:68,c:'#3a2d6e',desc:'宇宙の膨張を加速させる謎のエネルギー'},
+    {lab:'ダークマター',v:27,c:'#6a4aa0',desc:'目に見えないが重力を及ぼす謎の物質'},
+    {lab:'ふつうの物質',v:5,c:'#5fd6ff',desc:'星・惑星・君の体…知っているのはこれだけ'}];
+  let hover=-1,revealed=false;
+  cv.addEventListener('pointermove',e=>{const p=pointerPos(cv,e);const w=cv._w,h=cv._h,cx=w*0.32,cy=h/2;
+    let a=(Math.atan2(p.y-cy,p.x-cx)+Math.PI*2.5)%(Math.PI*2);let acc=0;hover=-1;
+    if(Math.hypot(p.x-cx,p.y-cy)<Math.min(w,h)*0.36)
+      for(let i=0;i<data.length;i++){const seg=data[i].v/100*Math.PI*2;if(a>=acc&&a<acc+seg){hover=i;break;}acc+=seg;}});
+  button(ctrl,'🎓 君へのメッセージ',null,()=>revealed=true);
+  button(ctrl,'もどす','ghost',()=>revealed=false);
+  loop(n,(dt,t)=>{const w=cv._w,h=cv._h;ctx.fillStyle='#03040c';ctx.fillRect(0,0,w,h);
+    const cx=w*0.32,cy=h/2,R=Math.min(w,h)*0.36;let acc=-Math.PI/2;
+    for(let i=0;i<data.length;i++){const seg=data[i].v/100*Math.PI*2;const rr=R*(hover===i?1.05:1);
+      ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,rr,acc,acc+seg);ctx.closePath();
+      ctx.fillStyle=data[i].c;ctx.fill();ctx.strokeStyle='#03040c';ctx.lineWidth=2;ctx.stroke();acc+=seg;}
+    ctx.fillStyle='#03040c';ctx.beginPath();ctx.arc(cx,cy,R*0.45,0,7);ctx.fill();
+    ctx.fillStyle='#fff';ctx.font='bold 16px sans-serif';ctx.textAlign='center';ctx.fillText('宇宙',cx,cy-2);
+    ctx.font='11px sans-serif';ctx.fillStyle='#99a2d6';ctx.fillText('100%',cx,cy+16);ctx.textAlign='left';
+    const lx=w*0.6;let ly=h*0.24;
+    data.forEach((d,i)=>{ctx.fillStyle=d.c;ctx.fillRect(lx,ly-11,15,15);
+      ctx.fillStyle=hover===i?'#fff':'#cdd3ff';ctx.font=(hover===i?'bold ':'')+'14px sans-serif';
+      ctx.fillText(d.lab+' '+d.v+'%',lx+24,ly+1);
+      if(hover===i){ctx.fillStyle='#99a2d6';ctx.font='11px sans-serif';ctx.fillText(d.desc,lx+24,ly+18);}
+      ly+=h*0.17;});
+    if(revealed){ctx.fillStyle='rgba(3,4,12,.85)';ctx.fillRect(0,0,w,h);ctx.textAlign='center';
+      ctx.fillStyle='#ffd166';ctx.font='bold 19px sans-serif';ctx.fillText('科学は、まだ完成していない。',w/2,h*0.36);
+      ctx.fillStyle='#fff';ctx.font='14px sans-serif';ctx.fillText('宇宙の95%は、いまだ誰も知らない謎のまま。',w/2,h*0.5);
+      ctx.fillStyle='#5fd6ff';ctx.font='bold 16px sans-serif';ctx.fillText('次の歴史を作るのは ── 君かもしれない。',w/2,h*0.64);
+      for(let i=0;i<5;i++){const x=w*0.3+i*w*0.1,y=h*0.8+Math.sin(t*2+i)*6;
+        glow(ctx,x,y,6,'rgba(255,232,59,.7)');ctx.fillStyle='#ffe83b';ctx.beginPath();ctx.arc(x,y,3,0,7);ctx.fill();
+        if(i<4){ctx.strokeStyle='rgba(255,232,59,.3)';ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(w*0.3+(i+1)*w*0.1,h*0.8+Math.sin(t*2+i+1)*6);ctx.stroke();}}
+      ctx.textAlign='left';}
+    stats.set('known','わかっている','5% だけ','#5fd6ff');stats.set('unknown','未知','95%','#b58bff');
+    rd(n,hover>=0?data[hover].lab+'：'+data[hover].desc:'知っているのはたった5%。残り95%は未知のフロンティアだ');
+  });
+};
+
+goto(0);
+</script>
+</body>
+</html>
