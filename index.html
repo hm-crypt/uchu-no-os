@@ -83,6 +83,7 @@
   button.btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
   button.btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
   button.btn.ghost:hover{border-color:var(--accent)}
+  button.btn.sel{background:linear-gradient(90deg,var(--accent),#4aa8ff);color:#04111a;border-color:transparent}
   .hint{font-size:12.5px;color:var(--muted);margin-top:10px}
   .readout{font-size:13px;color:var(--accent2);margin-top:8px;font-variant-numeric:tabular-nums;min-height:1.2em}
   .stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
@@ -148,9 +149,9 @@ const CH=[
   "この法則の精度はすさまじく、計算だけで未知の惑星<b>「海王星」</b>の位置を言い当て、本当にそこから発見されたほどだった。"
  ],
  quote:"自然は、単純さを好む。",
- key:"<b>万有引力</b>がわかると、リンゴの落下も惑星の軌道も同じ式で説明でき、未来の位置すら予言できる。",
- simTitle:"重力で遊ぶ：軌道を作れ／的を撃て",
- simHint:"🎯的当てモードは左下の大砲が発射地点。撃ちたい方向へドラッグして離すと発射（長く引くほど強い）。点線の予測軌道を見ながら岩を狙おう。🛰軌道モードでは惑星の横をドラッグし、横向きの速さを調整して人工衛星を周回させよう。速すぎると脱出、遅すぎると落下する。"},
+ key:"重力の下で物を投げると、その軌道は<b>2次関数（放物線）y=ax²+bx</b>。速く投げると放物線が一周して<b>軌道</b>になる――落ちるリンゴと回る月は、同じ重力だ。",
+ simTitle:"ニュートンの大砲：天体から打ち上げて軌道に乗せる",
+ simHint:"天体を選び、発射スピード（円軌道=100%）と角度を決めて🚀発射。弱いと地表に落下（放物線）、約100%で人工衛星の軌道に、速すぎると脱出。白い点線＝予測の放物線で、左上の数式 y=ax²+bx そのもの（2次関数！）。天体（重力）を変えると係数 a が変わる。"},
 
 {n:2,t:"ルネサンスの万能天才：ダ・ヴィンチと解剖学",who:"レオナルド・ダ・ヴィンチ",role:"観察の先駆者",sim:"davinci",
  lead:"すべての発見は「よく見ること」から始まる。",
@@ -160,9 +161,9 @@ const CH=[
   "彼は<span class='lead'>「実際に見て、描いて、確かめる」</span>という科学の基本姿勢を、誰よりも早く実践した先駆者だった。"
  ],
  quote:"経験こそ、すべての確かさの母である。",
- key:"理論の前に、まず<b>観察</b>。世界をありのままに見る目が、科学のスタート地点だ。",
- simTitle:"鏡文字スタジオ＆動く解剖図",
- simHint:"文字を打つと鏡文字に変換（スマホのカメラを鏡にして読める）。右では心臓が鼓動し血液が流れ、鳥の翼が羽ばたく。スライダーで心拍と羽ばたきの速さを変えられる。"},
+ key:"理論の前に、まず<b>観察</b>。そして観察を<b>レポート（仮説→予想→方法→結果→考察）</b>とスケッチで残すのが科学の基本だ。",
+ simTitle:"科学レポートの書き方＆観察スケッチ術",
+ simHint:"科学の発見は「観察→記録→考える」。下のボタンでレポートの5ステップ（①仮説 ②予想 ③方法 ④結果 ⑤考察）と、ダ・ヴィンチ式スケッチの描き方を切り替えて学べる。上の欄は鏡文字メモ。"},
 
 {n:3,t:"ガリレイが見つけた「相対性」の種",who:"ガリレオ・ガリレイ",role:"近代科学の父",sim:"galileo",
  lead:"動いていても、物理のルールは変わらない。",
@@ -174,7 +175,7 @@ const CH=[
  quote:"それでも地球は動いている。",
  key:"<b>等速運動</b>する乗り物の中では、外と同じ物理法則が成り立つ。運動は「相対的」だ。",
  simTitle:"二つの視点を同時に見る",
- simHint:"上＝外（地上）の視点、下＝車内の視点を同時表示。発射すると、車内ではボールは真上→真下なのに、外から見ると山なりの放物線。同じ現象が視点で違って見える。"},
+ simHint:"上＝地上の視点、下＝車内の視点を同時表示。地上の視点では電車ごと画面を横切って進み、その中で投げ上げたボールは放物線を描く。車内の視点では電車は止まって見え、ボールは真上→真下。速さ0なら両方同じ。"},
 
 {n:4,t:"熱力学と産業革命：蒸気機関が変えた世界",who:"ルートヴィッヒ・ボルツマン",role:"統計力学の開拓者",sim:"thermo",
  lead:"「熱」の正体は、目に見えない粒のダンスだった。",
@@ -425,6 +426,10 @@ function glow(ctx,x,y,r,inner,outer){const g=ctx.createRadialGradient(x,y,0,x,y,
 function drawGrid(ctx,w,h,cell,color){ctx.strokeStyle=color||'rgba(95,214,255,.06)';ctx.lineWidth=1;ctx.beginPath();
   for(let x=0;x<=w;x+=cell){ctx.moveTo(x+.5,0);ctx.lineTo(x+.5,h);}
   for(let y=0;y<=h;y+=cell){ctx.moveTo(0,y+.5);ctx.lineTo(w,y+.5);}ctx.stroke();}
+function wrapText(ctx,text,x,y,maxW,lh){let line='',yy=y;
+  for(const ch of [...String(text)]){if(ch==='\n'){ctx.fillText(line,x,yy);line='';yy+=lh;continue;}
+    const test=line+ch;if(ctx.measureText(test).width>maxW&&line){ctx.fillText(line,x,yy);line=ch;yy+=lh;}else line=test;}
+  if(line)ctx.fillText(line,x,yy);return yy+lh;}
 function nmToRGB(wl){let r,g,b;
   if(wl<380)return[80,0,110];
   else if(wl<440){r=-(wl-440)/60;g=0;b=1;}
@@ -457,220 +462,234 @@ const SIMS={};
 /* ---- 第1章：重力（軌道力学＋的当て） ---- */
 SIMS.gravity=function(wrap,n){
   const {cv,ctx}=makeStage(wrap);const ctrl=controls(wrap);const stats=statBar(wrap);
-  let mode='orbit',gMul=1,projs=[],rocks=[],parts=[],score=0,drag=null;
-  toggle(ctrl,[{label:'🛰 軌道モード',val:'orbit'},{label:'🎯 的当てモード',val:'throw'}],v=>{
-    mode=v;projs=[];if(v==='throw')spawnRocks();});
-  const pre=document.createElement('div');pre.style.cssText='display:flex;gap:6px;flex-wrap:wrap';
-  [['🌙月',0.16],['🔴火星',0.38],['🌍地球',1],['🟠木星',2.5],['🚀無重力',0]].forEach(([nm,g])=>{
-    const b=document.createElement('button');b.className='btn ghost';b.style.padding='6px 10px';b.textContent=nm;
-    b.onclick=()=>gMul=g;pre.appendChild(b);});
-  ctrl.appendChild(pre);
-  button(ctrl,'クリア','ghost',()=>{projs=[];parts=[];});
-  function spawnRocks(){const w=cv._w,h=cv._h;rocks=[];for(let i=0;i<4;i++)
-    rocks.push({x:w*(.55+Math.random()*.4),y:h*(.12+Math.random()*.7),r:13+Math.random()*9});}
-  function explode(x,y,c){for(let i=0;i<18;i++){const a=Math.random()*7,s=40+Math.random()*160;
-    parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:1,c});}}
-  cv.addEventListener('pointerdown',e=>{const p=pointerPos(cv,e);
-    drag=mode==='throw'?{a:{x:cv._w*0.1,y:cv._h-34},b:p}:{a:p,b:p};});
-  cv.addEventListener('pointermove',e=>{if(drag)drag.b=pointerPos(cv,e);});
-  cv.addEventListener('pointerup',e=>{if(!drag)return;const p=pointerPos(cv,e);
-    const s=mode==='throw'?2.0:-2.4; // throw:撃ちたい方向へ / orbit:スリングショット
-    projs.push({x:drag.a.x,y:drag.a.y,vx:(p.x-drag.a.x)*s,vy:(p.y-drag.a.y)*s,trail:[],alive:true});
-    if(projs.length>6)projs.shift();drag=null;});
-  const GM=420000;
-  function accel(o,cx,cy){if(mode==='orbit'){const dx=cx-o.x,dy=cy-o.y,r=Math.hypot(dx,dy)+8;
-      const a=GM/(r*r);return[a*dx/r,a*dy/r,r];}return[0,gMul*900,0];}
-  function integrate(o,dt,cx,cy){const N=4,sd=dt/N;for(let s=0;s<N;s++){
-    const[ax,ay]=accel(o,cx,cy);o.vx+=ax*sd;o.vy+=ay*sd;o.x+=o.vx*sd;o.y+=o.vy*sd;}}
-  loop(n,(dt,t)=>{const w=cv._w,h=cv._h,cx=w/2,cy=h/2;
+  const bodies=[
+    {name:'🌙 月',g:0.17,col:'#cdd3e2',deep:'#6f7790'},
+    {name:'🔴 火星',g:0.38,col:'#e0875f',deep:'#8a3a20'},
+    {name:'🌍 地球',g:1.0,col:'#5aa6e6',deep:'#143f6c'},
+    {name:'🟠 木星',g:2.4,col:'#e0b878',deep:'#94652b'}
+  ];
+  let bodyIdx=2,pct=70,angle=0,proj=null;
+  const bb=document.createElement('div');bb.style.cssText='display:flex;gap:6px;flex-wrap:wrap';const bbtns=[];
+  bodies.forEach((b,i)=>{const btn=document.createElement('button');btn.className='btn ghost';btn.style.padding='6px 10px';btn.textContent=b.name;
+    btn.onclick=()=>{bodyIdx=i;proj=null;bbtns.forEach(x=>x.classList.remove('sel'));btn.classList.add('sel');};
+    bb.appendChild(btn);bbtns.push(btn);});
+  ctrl.appendChild(bb);bbtns[bodyIdx].classList.add('sel');
+  slider(ctrl,'発射スピード（円軌道=100%）',0,175,70,1,v=>{pct=v;return v+' %';});
+  slider(ctrl,'発射角度',0,80,0,1,v=>{angle=v;return v+'°';});
+  button(ctrl,'🚀 発射',null,()=>{proj=launch();});
+  button(ctrl,'クリア','ghost',()=>{proj=null;});
+  function geom(){const w=cv._w,h=cv._h,cx=w/2,cy=h*0.56,pr=Math.min(w,h)*0.19,lr=pr+12;
+    const gpx=bodies[bodyIdx].g*430,GM=gpx*pr*pr,vc=Math.sqrt(GM/lr);
+    return{w,h,cx,cy,pr,lr,GM,vc,gloc:GM/(lr*lr)};}
+  function launch(){const G=geom(),v=pct/100*G.vc,a=angle*Math.PI/180,Px=G.cx,Py=G.cy-G.lr;
+    return{x:Px,y:Py,vx:v*Math.cos(a),vy:-v*Math.sin(a),trail:[{x:Px,y:Py}],cum:0,prev:Math.atan2(Py-G.cy,Px-G.cx),result:null,frozen:false};}
+  loop(n,(dt,t)=>{const G=geom(),w=G.w,h=G.h,cx=G.cx,cy=G.cy,pr=G.pr,lr=G.lr;
     ctx.fillStyle='#03040c';ctx.fillRect(0,0,w,h);
-    const cell=Math.max(34,Math.min(w,h)/12);
-    drawGrid(ctx,w,h,cell);
-    const pr=Math.min(w,h)*0.075;
-    if(mode==='orbit'){
-      ctx.strokeStyle='rgba(95,214,255,.12)';ctx.setLineDash([3,6]);
-      for(let r=pr*2;r<Math.max(w,h)*0.7;r+=pr*2){ctx.beginPath();ctx.arc(cx,cy,r,0,7);ctx.stroke();}
-      ctx.setLineDash([]);
-      glow(ctx,cx,cy,pr*2.6,'rgba(90,150,255,.30)');
-      const g=ctx.createRadialGradient(cx-pr*.3,cy-pr*.3,2,cx,cy,pr);
-      g.addColorStop(0,'#bfe0ff');g.addColorStop(.5,'#3f7fd6');g.addColorStop(1,'#13315e');
-      ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,pr,0,7);ctx.fill();
-    }else{ctx.fillStyle='#0e1330';ctx.fillRect(0,h-22,w,22);
-      for(const r of rocks){ctx.fillStyle='#7b6b55';ctx.beginPath();ctx.arc(r.x,r.y,r.r,0,7);ctx.fill();
-        ctx.fillStyle='#5a4d3d';ctx.beginPath();ctx.arc(r.x-r.r*.3,r.y-r.r*.2,r.r*.3,0,7);ctx.fill();}
-      // 固定の大砲（発射地点）― 砲身は狙う方向へ向く
-      const cnx=w*0.1,cny=h-34;let aimX=cnx+46,aimY=cny-44;
-      if(drag){aimX=drag.b.x;aimY=drag.b.y;}
-      ctx.save();ctx.translate(cnx,cny);ctx.rotate(Math.atan2(aimY-cny,aimX-cnx));
-      ctx.fillStyle='#3a4170';ctx.fillRect(0,-7,36,14);
-      ctx.fillStyle='#5a64a0';ctx.fillRect(30,-8,8,16);ctx.restore();
-      glow(ctx,cnx,cny,18,'rgba(124,255,178,.25)');
-      ctx.fillStyle='#222a52';ctx.beginPath();ctx.arc(cnx,cny,14,0,7);ctx.fill();
-      ctx.strokeStyle='#5fd6ff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(cnx,cny,14,0,7);ctx.stroke();
-      // 目盛り（距離・高さ）
-      const ground=h-22;ctx.font='10px sans-serif';
-      ctx.strokeStyle='rgba(95,214,255,.2)';ctx.lineWidth=1;
-      for(let i=1;cnx+i*cell<w;i++){const x=cnx+i*cell;ctx.beginPath();ctx.moveTo(x,ground);ctx.lineTo(x,ground-5);ctx.stroke();
-        if(i%2===0){ctx.fillStyle='rgba(153,162,214,.7)';ctx.fillText(i,x-3,ground-7);}}
-      for(let j=1;ground-j*cell>14;j++){const y=ground-j*cell;ctx.beginPath();ctx.moveTo(cnx,y);ctx.lineTo(cnx+5,y);ctx.stroke();
-        if(j%2===0){ctx.fillStyle='rgba(153,162,214,.7)';ctx.fillText(j,cnx+7,y+3);}}
-      ctx.fillStyle='rgba(153,162,214,.85)';ctx.fillText('距離→(マス)',w-80,ground-6);ctx.fillText('高さ↑',cnx+7,16);}
-    // prediction
-    if(drag){const ps=mode==='throw'?2.0:-2.4;
-      const o={x:drag.a.x,y:drag.a.y,vx:(drag.b.x-drag.a.x)*ps,vy:(drag.b.y-drag.a.y)*ps};
-      ctx.fillStyle='rgba(124,255,178,.55)';
-      for(let i=0;i<150;i++){integrate(o,0.016,cx,cy);
-        if(mode==='orbit'&&Math.hypot(cx-o.x,cy-o.y)<pr)break;
-        if(o.x<0||o.x>w||o.y<0||o.y>h)break;
-        if(i%4===0){ctx.beginPath();ctx.arc(o.x,o.y,1.6,0,7);ctx.fill();}}
-      ctx.strokeStyle='#5fd6ff';ctx.lineWidth=2;ctx.beginPath();
-      ctx.moveTo(drag.a.x,drag.a.y);ctx.lineTo(drag.b.x,drag.b.y);ctx.stroke();
-      ctx.fillStyle='#5fd6ff';ctx.beginPath();ctx.arc(drag.a.x,drag.a.y,5,0,7);ctx.fill();}
-    // projectiles
-    let live=0,lastSpeed=0,lastAlt=0;
-    for(const o of projs){if(!o.alive)continue;integrate(o,dt,cx,cy);
-      o.trail.push({x:o.x,y:o.y});if(o.trail.length>120)o.trail.shift();
-      // collisions
-      if(mode==='orbit'){const r=Math.hypot(cx-o.x,cy-o.y);lastSpeed=Math.hypot(o.vx,o.vy);lastAlt=r-pr;
-        if(r<pr){o.alive=false;explode(o.x,o.y,'#ff7eb6');}
-        if(o.x<-50||o.x>w+50||o.y<-50||o.y>h+50){o.alive=false;}}
-      else{lastSpeed=Math.hypot(o.vx,o.vy);
-        if(o.y>h-22){o.alive=false;explode(o.x,o.y,'#888');}
-        for(const r of rocks){if(Math.hypot(r.x-o.x,r.y-o.y)<r.r+5){r.hit=true;o.alive=false;
-          score++;explode(o.x,o.y,'#ffd166');}}
-        rocks=rocks.filter(r=>!r.hit);if(rocks.length===0)spawnRocks();
-        if(o.x<-30||o.x>w+30)o.alive=false;}
-      // draw trail
-      ctx.strokeStyle='rgba(124,255,178,.4)';ctx.lineWidth=2;ctx.beginPath();
-      o.trail.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke();
-      glow(ctx,o.x,o.y,10,'rgba(124,255,178,.8)');
-      ctx.fillStyle='#eafff3';ctx.beginPath();ctx.arc(o.x,o.y,4.5,0,7);ctx.fill();live++;}
-    projs=projs.filter(o=>o.alive);
-    // particles
-    for(const p of parts){p.life-=dt*1.5;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=400*dt;
-      if(p.life>0){ctx.fillStyle=p.c.replace(')',','+p.life.toFixed(2)+')').replace('rgb','rgba').replace('#','');
-        ctx.globalAlpha=Math.max(0,p.life);ctx.fillStyle=p.c;ctx.beginPath();ctx.arc(p.x,p.y,3,0,7);ctx.fill();ctx.globalAlpha=1;}}
-    parts=parts.filter(p=>p.life>0);
-    if(projs.length===0&&!drag){ctx.fillStyle='#8c95cc';ctx.font='14px sans-serif';ctx.textAlign='center';
-      ctx.fillText(mode==='orbit'?'惑星の横をドラッグして、人工衛星を発射しよう':'左下の大砲から、撃ちたい方向へドラッグして離す（長いほど強い）',cx,h*0.88);ctx.textAlign='left';}
-    stats.set('mode','モード',mode==='orbit'?'軌道力学':'放物運動');
-    stats.set('g','重力',mode==='orbit'?'1/r²（万有引力）':gMul.toFixed(2)+' G');
-    if(mode==='orbit'){stats.set('sp','衛星の速さ',Math.round(lastSpeed));stats.set('alt','高度',Math.max(0,Math.round(lastAlt)));}
-    else stats.set('score','撃破スコア',score,'#ffd166');
-    rd(n,mode==='orbit'?'横向きに速く投げると「落ち続けながら回る」＝周回。速すぎると振り切って脱出、遅すぎると墜落':
-      '重力が強いほど弾は早く落ちる。月では遠くまで飛び、木星ではすぐ落ちる');
+    const cell=Math.min(w,h)/12;drawGrid(ctx,w,h,cell);
+    const Px=cx,Py=cy-lr;
+    // 円軌道ガイド
+    ctx.strokeStyle='rgba(124,255,178,.18)';ctx.setLineDash([4,7]);ctx.beginPath();ctx.arc(cx,cy,lr,0,7);ctx.stroke();ctx.setLineDash([]);
+    // 天体
+    glow(ctx,cx,cy,pr*1.9,'rgba(120,170,255,.18)');
+    const b=bodies[bodyIdx];const pgr=ctx.createRadialGradient(cx-pr*.35,cy-pr*.35,2,cx,cy,pr);
+    pgr.addColorStop(0,b.col);pgr.addColorStop(1,b.deep);ctx.fillStyle=pgr;ctx.beginPath();ctx.arc(cx,cy,pr,0,7);ctx.fill();
+    // 発射点を原点とした座標軸
+    ctx.strokeStyle='rgba(255,255,255,.35)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(Px,Py);ctx.lineTo(Px+cell*4.5,Py);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(Px,Py);ctx.lineTo(Px,Py-cell*3);ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,.6)';ctx.font='11px sans-serif';
+    ctx.fillText('x',Px+cell*4.5+3,Py+4);ctx.fillText('y',Px-11,Py-cell*3-2);ctx.fillText('O',Px-13,Py+13);
+    // 放物線プレビュー（一様重力近似）＋ 係数
+    const v=pct/100*G.vc,a=angle*Math.PI/180,vx0=v*Math.cos(a),vy0=v*Math.sin(a);
+    let A=0,B=0;
+    if(vx0>0.5){const k=G.gloc/(2*vx0*vx0);A=-k*cell;B=vy0/vx0;
+      ctx.strokeStyle='rgba(255,255,255,.5)';ctx.setLineDash([3,4]);ctx.lineWidth=1.5;ctx.beginPath();
+      let started=false;
+      for(let X=0;X<=w;X+=4){const Y=B*X-k*X*X;const sx=Px+X,sy=Py-Y;
+        if(Math.hypot(sx-cx,sy-cy)<pr)break;if(sx>w||sy>h||sy<0)break;
+        started?ctx.lineTo(sx,sy):ctx.moveTo(sx,sy);started=true;}
+      ctx.stroke();ctx.setLineDash([]);}
+    // 照準
+    {const al=28+pct*0.6;ctx.strokeStyle='#ffd166';ctx.lineWidth=3;ctx.beginPath();
+      ctx.moveTo(Px,Py);ctx.lineTo(Px+Math.cos(a)*al,Py-Math.sin(a)*al);ctx.stroke();}
+    // 発射体シミュレーション（逆2乗の本物の重力）
+    if(proj){
+      if(!proj.frozen){const N=6,sd=dt/N;
+        for(let s=0;s<N;s++){const dx=proj.x-cx,dy=proj.y-cy,r=Math.hypot(dx,dy);
+          const ac=G.GM/(r*r);proj.vx-=ac*dx/r*sd;proj.vy-=ac*dy/r*sd;proj.x+=proj.vx*sd;proj.y+=proj.vy*sd;
+          const ang2=Math.atan2(proj.y-cy,proj.x-cx);let dA=ang2-proj.prev;
+          if(dA>Math.PI)dA-=2*Math.PI;if(dA<-Math.PI)dA+=2*Math.PI;proj.cum+=Math.abs(dA);proj.prev=ang2;
+          const rr=Math.hypot(proj.x-cx,proj.y-cy);const E=0.5*(proj.vx*proj.vx+proj.vy*proj.vy)-G.GM/rr;
+          if(rr<=pr){proj.result='落下';proj.frozen=true;break;}
+          if(!proj.result&&proj.cum>=2*Math.PI){proj.result='軌道';}
+          if(E>=0&&rr>pr*1.3){proj.result='脱出';}
+          if(rr>Math.max(w,h)*1.1){proj.frozen=true;break;}}
+        proj.trail.push({x:proj.x,y:proj.y});if(proj.trail.length>900)proj.trail.shift();}
+      ctx.strokeStyle=proj.result==='軌道'?'rgba(124,255,178,.8)':proj.result==='脱出'?'rgba(255,209,102,.8)':'rgba(95,214,255,.8)';
+      ctx.lineWidth=2;ctx.beginPath();proj.trail.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke();
+      if(!proj.frozen||proj.result==='軌道'){glow(ctx,proj.x,proj.y,9,'rgba(234,255,243,.9)');
+        ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(proj.x,proj.y,5,0,7);ctx.fill();}
+    }
+    // 数式ボックス
+    const bw=Math.min(340,w*0.62);ctx.fillStyle='rgba(8,10,28,.82)';ctx.fillRect(10,10,bw,62);
+    ctx.strokeStyle='#272d55';ctx.strokeRect(10,10,bw,62);
+    let eq='y = '+A.toFixed(3)+' x²';if(Math.abs(B)>0.001)eq+=(B>0?' + ':' − ')+Math.abs(B).toFixed(2)+' x';
+    ctx.fillStyle='#ffd166';ctx.font='bold 18px monospace';ctx.fillText(eq,20,38);
+    ctx.fillStyle='#7CFFB2';ctx.font='12px sans-serif';ctx.fillText('← 軌道は 2次関数（放物線）！ a は重力で決まる',20,57);
+    // 結果バナー
+    if(proj&&proj.result){const msg=proj.result==='軌道'?'🛰 軌道に乗った！ 放物線が一周→楕円軌道（人工衛星）':
+      proj.result==='脱出'?'🚀 脱出速度を超えた！ 重力を振り切った':'💥 地表に落下（放物線）— もう少し速く！';
+      ctx.fillStyle=proj.result==='軌道'?'#7CFFB2':proj.result==='脱出'?'#ffd166':'#ff7eb6';
+      ctx.font='bold 15px sans-serif';ctx.textAlign='center';ctx.fillText(msg,w/2,h-12);ctx.textAlign='left';}
+    stats.set('body','天体',bodies[bodyIdx].name);
+    stats.set('spd','発射',pct+' %（円速度比）');
+    stats.set('res','結果',proj?(proj.result||'飛行中'):'—',proj&&proj.result==='軌道'?'#7CFFB2':'#ffd166');
+    rd(n,proj&&proj.result==='軌道'?'落ちるリンゴも回る人工衛星も同じ「重力」。投げる速さを上げると放物線が一周して軌道になる＝ニュートンの大発見':
+      '発射→重力で曲がる軌道は放物線（y=ax²+bx）。約100%で人工衛星の軌道に。天体を変えると重力が変わり、係数aも変わる');
   });
 };
 
 /* ---- 第2章：ダ・ヴィンチ ---- */
 SIMS.davinci=function(wrap,n){
-  const inp=document.createElement('input');inp.type='text';inp.value='かんさつこそかがく';
-  inp.style.cssText='width:100%;padding:10px;border-radius:8px;border:1px solid #272d55;background:#141833;color:#fff;font-size:15px;margin-bottom:8px';
+  const inp=document.createElement('input');inp.type='text';inp.value='かんさつメモ';
+  inp.style.cssText='width:100%;padding:9px;border-radius:8px;border:1px solid #272d55;background:#141833;color:#fff;font-size:14px;margin-bottom:6px';
   wrap.appendChild(inp);
   const mirror=document.createElement('div');
-  mirror.style.cssText='transform:scaleX(-1);text-align:center;font-size:24px;padding:8px;background:#0f1330;border:1px dashed #5fd6ff;border-radius:8px;color:#ffd166;min-height:1.6em;letter-spacing:2px';
+  mirror.style.cssText='transform:scaleX(-1);text-align:center;font-size:20px;padding:6px;background:#0f1330;border:1px dashed #5fd6ff;border-radius:8px;color:#ffd166;min-height:1.4em;letter-spacing:2px';
   wrap.appendChild(mirror);
-  const lab=document.createElement('div');lab.style.cssText='font-size:11px;color:#99a2d6;text-align:center;margin:4px 0 8px';
-  lab.textContent='↑ 鏡文字（左右反転）。スマホのカメラを鏡にして読んでみて！';wrap.appendChild(lab);
+  const lab=document.createElement('div');lab.style.cssText='font-size:11px;color:#99a2d6;text-align:center;margin:3px 0 8px';
+  lab.textContent='↑ ダ・ヴィンチ式「鏡文字」メモ（カメラを鏡にして読める）';wrap.appendChild(lab);
   const upd=()=>mirror.textContent=inp.value||' ';inp.oninput=upd;upd();
-  const {cv,ctx}=makeStage(wrap);const ctrl=controls(wrap);
-  let hr=1.4,flap=1;
-  slider(ctrl,'心拍の速さ',0.5,3,1.4,0.1,v=>{hr=v;return Math.round(v*55)+' 拍/分';});
-  slider(ctrl,'羽ばたきの速さ',0.5,4,1,0.1,v=>{flap=v;return v.toFixed(1)+'×';});
-  let cells=null;
-  loop(n,(dt,t)=>{const w=cv._w,h=cv._h;ctx.fillStyle='#0a0c20';ctx.fillRect(0,0,w,h);
-    // parchment tint
-    ctx.fillStyle='rgba(80,65,40,.10)';ctx.fillRect(0,0,w,h);
-    // ---- heart (left) ----
-    const beat=Math.pow(Math.abs(Math.sin(t*hr*Math.PI)),3);
-    const cx=w*0.27,cy=h*0.5,R=Math.min(w,h)*0.15*(1+beat*0.2);
-    ctx.strokeStyle='#5a1d2e';ctx.lineWidth=11;ctx.lineCap='round';
-    ctx.beginPath();ctx.moveTo(cx,cy-R);ctx.quadraticCurveTo(cx+R*1.6,cy-R*1.8,cx+w*0.12,cy-R*1.4);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(cx,cy+R*.6);ctx.quadraticCurveTo(cx-R*1.4,cy+R*1.8,cx-w*0.12,cy+R*1.6);ctx.stroke();
-    glow(ctx,cx,cy,R*2.2,'rgba(220,40,70,'+(0.12+beat*0.18)+')');
-    ctx.fillStyle='rgba(210,40,68,'+(0.78+beat*0.22)+')';ctx.beginPath();
-    ctx.moveTo(cx,cy+R*0.85);
-    ctx.bezierCurveTo(cx-R*1.5,cy-R*0.45,cx-R*0.55,cy-R*1.3,cx,cy-R*0.45);
-    ctx.bezierCurveTo(cx+R*0.55,cy-R*1.3,cx+R*1.5,cy-R*0.45,cx,cy+R*0.85);ctx.fill();
-    if(!cells)cells=Array.from({length:30},(_,i)=>({p:i/30,lane:i%2}));
-    for(const c of cells){c.p+=(0.16+beat*0.55)*dt;if(c.p>1)c.p-=1;
-      let x,y;if(c.lane===0){x=cx+(w*0.12-cx)*c.p;y=cy-R+(cy-R*1.4-(cy-R))*Math.sin(c.p*Math.PI);}
-      else{x=cx+(-w*0.12-cx)*c.p;y=cy+R*.6+(cy+R*1.6-(cy+R*.6))*Math.sin(c.p*Math.PI);}
-      ctx.fillStyle='#ff5a7a';ctx.beginPath();ctx.arc(x,y,3,0,7);ctx.fill();}
-    ctx.fillStyle='#c9b48a';ctx.font='12px serif';ctx.fillText('心臓と血流の観察',w*0.12,h-12);
-    // ---- bird wing (right) ----
-    const bx=w*0.72,by=h*0.42;const ang=Math.sin(t*flap*5)*0.7;
-    ctx.save();ctx.translate(bx,by);
-    // body
-    ctx.fillStyle='#d8c79a';ctx.beginPath();ctx.ellipse(0,0,16,9,0,0,7);ctx.fill();
-    for(const dir of [1,-1]){ctx.save();ctx.scale(dir,1);ctx.rotate(ang);
-      ctx.strokeStyle='#c9b48a';ctx.lineWidth=2;ctx.fillStyle='rgba(216,199,154,.5)';
-      ctx.beginPath();ctx.moveTo(8,0);
-      for(let i=0;i<=6;i++){const fa=i/6;ctx.lineTo(8+fa*w*0.16,Math.sin(fa*2.2)*18-6);}
-      for(let i=6;i>=0;i--){const fa=i/6;ctx.lineTo(8+fa*w*0.16,Math.sin(fa*2.2)*18+10);}
-      ctx.closePath();ctx.fill();ctx.stroke();
-      // feathers
-      ctx.strokeStyle='#b09a6a';ctx.lineWidth=1;
-      for(let i=1;i<=6;i++){const fa=i/6;ctx.beginPath();
-        ctx.moveTo(8+fa*w*0.16,Math.sin(fa*2.2)*18-2);ctx.lineTo(8+fa*w*0.16,Math.sin(fa*2.2)*18+14);ctx.stroke();}
-      ctx.restore();}
-    ctx.restore();
-    ctx.fillStyle='#c9b48a';ctx.font='12px serif';ctx.fillText('鳥の飛翔の研究',w*0.6,h-12);
-    rd(n,'観察→記録→理解。ダ・ヴィンチは500年前にこれを実践した');
+  const {cv,ctx}=makeStage(wrap);const ctrl=controls(wrap);const stats=statBar(wrap);
+  const sec=[
+    {k:'①仮説',c:'#5fd6ff',icon:'❓',def:'「こうではないか？」という問い・仮の答え。観察から疑問を持つのが出発点。',
+      ex:'例）鳥はなぜ落ちずに飛べる？ →「翼の形が関係しているのでは？」'},
+    {k:'②予想',c:'#7CFFB2',icon:'🔮',def:'仮説が正しいなら「こうなるはず」と具体的に予言する。',
+      ex:'例）翼を大きく広げるほど、ゆっくり長く滑空できるはずだ。'},
+    {k:'③方法',c:'#ffd166',icon:'🧪',def:'だれがやっても同じ結果になるよう、手順・条件・道具を具体的に書く。',
+      ex:'例）同じ重さの模型で翼の面積だけ変え、滑空距離を5回ずつ測る。'},
+    {k:'④結果',c:'#ff9e6a',icon:'📊',def:'起きた事実だけを、表・グラフ・スケッチで正直に記録（意見は書かない）。',
+      ex:'例）翼が大きいほど滞空時間が長かった（右のグラフ）。'},
+    {k:'⑤考察',c:'#ff7eb6',icon:'💭',def:'結果は仮説と合った？なぜそうなった？次の疑問は？を考える。',
+      ex:'例）予想通り。揚力は翼の面積に関係しそう。次は形を変えて試したい。'},
+    {k:'スケッチ術',c:'#b58bff',icon:'✏️',def:'観察スケッチのコツ（ダ・ヴィンチ式）。よく見て、大きく、気づきを言葉でも残す。',ex:''}
+  ];
+  let sel=0,phase=0;
+  const bb=document.createElement('div');bb.style.cssText='display:flex;gap:5px;flex-wrap:wrap';const bbtns=[];
+  sec.forEach((s,i)=>{const btn=document.createElement('button');btn.className='btn ghost';btn.style.padding='6px 9px';btn.style.fontSize='12px';btn.textContent=s.k;
+    btn.onclick=()=>{sel=i;phase=0;bbtns.forEach(x=>x.classList.remove('sel'));btn.classList.add('sel');};
+    bb.appendChild(btn);bbtns.push(btn);});
+  ctrl.appendChild(bb);bbtns[0].classList.add('sel');
+  function drawIllust(i,x,y,r,t){
+    if(i===0){ctx.fillStyle='#5fd6ff';ctx.font='bold '+Math.round(r*1.4)+'px sans-serif';ctx.textAlign='center';
+      ctx.fillText('?',x,y+r*0.5);ctx.textAlign='left';}
+    else if(i===1){const yy=y+Math.sin(t*2)*8;ctx.strokeStyle='#7CFFB2';ctx.lineWidth=3;
+      ctx.beginPath();ctx.moveTo(x-r,yy);ctx.quadraticCurveTo(x,yy-r*0.6,x+r,yy);ctx.stroke();
+      ctx.fillStyle='#7CFFB2';ctx.beginPath();ctx.arc(x,yy-r*0.16,4,0,7);ctx.fill();}
+    else if(i===2){ctx.strokeStyle='#ffd166';ctx.lineWidth=3;ctx.beginPath();
+      ctx.moveTo(x-r*0.25,y-r*0.7);ctx.lineTo(x-r*0.25,y-r*0.1);ctx.lineTo(x-r*0.6,y+r*0.6);
+      ctx.lineTo(x+r*0.6,y+r*0.6);ctx.lineTo(x+r*0.25,y-r*0.1);ctx.lineTo(x+r*0.25,y-r*0.7);ctx.stroke();
+      ctx.fillStyle='rgba(255,209,102,.3)';ctx.fillRect(x-r*0.5,y+r*0.1,r,r*0.5);
+      for(let bbi=0;bbi<4;bbi++){const by=y+r*0.6-((t*45+bbi*18)%(r*0.7));ctx.fillStyle='#ffd166';ctx.beginPath();ctx.arc(x-r*0.25+bbi*r*0.16,by,2,0,7);ctx.fill();}}
+    else if(i===3){const bars=[0.45,0.72,1.0];ctx.fillStyle='#ff9e6a';
+      bars.forEach((bv,k)=>{const bh=bv*r*1.3;ctx.fillRect(x-r*0.65+k*r*0.5,y+r*0.7-bh,r*0.34,bh);});
+      ctx.strokeStyle='#99a2d6';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x-r*0.75,y+r*0.7);ctx.lineTo(x+r*0.85,y+r*0.7);ctx.stroke();}
+    else if(i===4){const pu=0.6+0.4*Math.abs(Math.sin(t*2));glow(ctx,x,y,r*pu,'rgba(255,126,182,.5)');
+      ctx.fillStyle='#ff7eb6';ctx.beginPath();ctx.arc(x,y,r*0.42,0,7);ctx.fill();
+      ctx.fillStyle='#14131f';ctx.fillRect(x-r*0.13,y+r*0.36,r*0.26,r*0.2);}
+  }
+  function drawFlow(active,w,h){const ks=['①','②','③','④','⑤'];const y=h-24,x0=24,gap=(w-60)/5;
+    for(let i=0;i<5;i++){const x=x0+gap*i+gap/2;ctx.fillStyle=i===active?sec[i].c:'#3a3f66';
+      ctx.beginPath();ctx.arc(x,y,9,0,7);ctx.fill();ctx.fillStyle=i===active?'#14131f':'#99a2d6';
+      ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText(ks[i],x,y+4);ctx.textAlign='left';
+      if(i<4){ctx.strokeStyle='#3a3f66';ctx.beginPath();ctx.moveTo(x+10,y);ctx.lineTo(x+gap-10,y);ctx.stroke();}}}
+  function drawSketch(w,h,ph){
+    const cx=w*0.74,cy=h*0.46,R=Math.min(w,h)*0.2;const cyc=(ph%8)/8;const st=Math.min(3,Math.floor(cyc*4));
+    ctx.fillStyle='#e9ecff';ctx.font='bold 14px sans-serif';ctx.fillText('観察スケッチの描き方',24,56);
+    ctx.strokeStyle='rgba(181,139,255,.35)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.ellipse(cx,cy,R*0.62,R,0,0,7);ctx.stroke();
+    if(st>=1){ctx.strokeStyle='#cdb6ff';ctx.lineWidth=2;ctx.beginPath();
+      ctx.moveTo(cx,cy-R);ctx.quadraticCurveTo(cx+R*0.62,cy,cx,cy+R);
+      ctx.quadraticCurveTo(cx-R*0.62,cy,cx,cy-R);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(cx,cy-R);ctx.lineTo(cx,cy+R);ctx.stroke();}
+    if(st>=2){ctx.fillStyle='rgba(181,139,255,.12)';ctx.beginPath();ctx.moveTo(cx,cy-R);ctx.quadraticCurveTo(cx+R*0.62,cy,cx,cy+R);ctx.lineTo(cx,cy-R);ctx.closePath();ctx.fill();
+      ctx.strokeStyle='rgba(181,139,255,.6)';ctx.lineWidth=1;
+      for(let k=1;k<=5;k++){const yy=cy-R+2*R*k/6;const wv=R*0.5*Math.sin(Math.PI*k/6);
+        ctx.beginPath();ctx.moveTo(cx,yy);ctx.lineTo(cx+wv,yy-wv*0.4);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(cx,yy);ctx.lineTo(cx-wv,yy-wv*0.4);ctx.stroke();}}
+    if(st>=3){ctx.fillStyle='#ffd166';ctx.font='12px serif';ctx.fillText('葉脈は左右対称',cx+R*0.3,cy-R*0.55);
+      ctx.strokeStyle='#ffd166';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(cx+R*0.28,cy-R*0.5);ctx.lineTo(cx+R*0.12,cy-R*0.2);ctx.stroke();
+      ctx.fillStyle='#99a2d6';ctx.font='11px serif';ctx.fillText('1452 / 4 / 15  観察',cx-R*0.6,cy+R+22);}
+    const tips=['① まず全体の形をうすく','② 輪郭をていねいに','③ 光と影・細部を描く','④ 気づきを言葉でメモ＋日付'];
+    ctx.font='13px sans-serif';
+    tips.forEach((tp,i)=>{ctx.fillStyle=i<=st?'#b58bff':'#555c8a';ctx.fillText((i<=st?'✓ ':'　 ')+tp,24,90+i*30);});
+  }
+  loop(n,(dt,t)=>{const w=cv._w,h=cv._h;phase+=dt;
+    ctx.fillStyle='#14131f';ctx.fillRect(0,0,w,h);ctx.fillStyle='rgba(120,100,60,.10)';ctx.fillRect(0,0,w,h);
+    ctx.strokeStyle='#3a3550';ctx.lineWidth=1;ctx.strokeRect(10,10,w-20,h-20);
+    const s=sec[sel];
+    ctx.fillStyle=s.c;ctx.font='bold 22px sans-serif';ctx.fillText(s.icon+' '+s.k,24,44);
+    ctx.strokeStyle=s.c;ctx.globalAlpha=.5;ctx.beginPath();ctx.moveTo(24,54);ctx.lineTo(w-24,54);ctx.stroke();ctx.globalAlpha=1;
+    if(sel<5){
+      ctx.fillStyle='#e9ecff';ctx.font='14px sans-serif';
+      const yy=wrapText(ctx,s.def,24,82,w*0.5,22);
+      ctx.fillStyle='rgba(255,255,255,.05)';ctx.fillRect(24,yy+12,w*0.56,60);
+      ctx.strokeStyle=s.c;ctx.lineWidth=1;ctx.strokeRect(24,yy+12,w*0.56,60);
+      ctx.fillStyle=s.c;ctx.font='12px sans-serif';wrapText(ctx,s.ex,32,yy+33,w*0.51,19);
+      drawIllust(sel,w*0.8,h*0.46,Math.min(w,h)*0.15,t);
+      drawFlow(sel,w,h);
+    }else{drawSketch(w,h,phase);}
+    stats.set('step','レポート',sel<5?s.k:'スケッチ術');
+    rd(n,sel<5?'科学レポートの基本5ステップ。ダ・ヴィンチも「観察→記録→考える」を実践した':
+      'スケッチのコツ：①うすく全体 ②輪郭 ③光と影 ④言葉のメモ＋日付。よく見て大きく描く！');
   });
 };
 
 /* ---- 第3章：ガリレイ 二視点 ---- */
 SIMS.galileo=function(wrap,n){
   const {cv,ctx}=makeStage(wrap);const ctrl=controls(wrap);const stats=statBar(wrap);
-  let speed=180,ball=null,trainX=0;
-  slider(ctrl,'新幹線の速さ',0,300,180,10,v=>{speed=v;return v+' km/h';});
-  button(ctrl,'ボールを真上に投げる',null,()=>{ball={t:0}});
-  loop(n,(dt)=>{const w=cv._w,h=cv._h;ctx.fillStyle='#070a1c';ctx.fillRect(0,0,w,h);
-    const px=speed/3.6*7;trainX+=px*dt;
-    const halfH=h/2;
-    // divider
-    ctx.strokeStyle='#272d55';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,halfH);ctx.lineTo(w,halfH);ctx.stroke();
-    if(ball){ball.t+=dt;if(ball.t>1.6)ball=null;}
-    function drawScene(oy,sh,outside){
-      const floor=oy+sh-26;
+  let speed=150;
+  slider(ctrl,'新幹線の速さ',0,300,150,10,v=>{speed=v;return v+' km/h';});
+  let trainX=0,bgOff=0,phase='wait',waitT=0,tFlight=0,trailOut=[],trailIn=[];const g=900;
+  loop(n,(dt)=>{const w=cv._w,h=cv._h,sh=h/2,tw=w*0.46;
+    const vS=speed*(w/650);
+    const Hmax=sh*0.40,vUp=Math.sqrt(2*g*Hmax),T=2*vUp/g;
+    trainX+=vS*dt;bgOff+=vS*dt;if(trainX>w+tw)trainX=-tw;
+    const inGate=trainX>-tw*0.2&&trainX<w*0.4;
+    if(phase==='wait'){waitT+=dt;if(waitT>0.4&&inGate){phase='fly';tFlight=0;trailOut=[];trailIn=[];}}
+    else{tFlight+=dt;if(tFlight>=T){phase='wait';waitT=0;}}
+    const active=phase==='fly';
+    const hgt=active?(vUp*tFlight-0.5*g*tFlight*tFlight):0;
+    ctx.fillStyle='#070a1c';ctx.fillRect(0,0,w,h);
+    ctx.strokeStyle='#272d55';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,sh);ctx.lineTo(w,sh);ctx.stroke();
+    function scene(oy,outside){
+      const floor=oy+sh-24,th=sh*0.46,ty=oy+sh*0.18;
       ctx.fillStyle='#0d1330';ctx.fillRect(0,floor,w,oy+sh-floor);
-      // poles move only in outside view
-      if(outside){for(let i=0;i<16;i++){const x=((i*120-trainX*0.5)%(w+120)+w+120)%(w+120)-60;
-        ctx.fillStyle='#1a2148';ctx.fillRect(x,floor-60,7,60);}}
-      // train
-      const tw=w*0.5,tx=w*0.5-tw/2,ty=oy+sh*0.18,th=sh*0.52;
+      for(let i=-1;i<16;i++){let x;if(outside)x=i*130+30;else x=((i*130-bgOff)%(w+260)+w+260)%(w+260)-130;
+        ctx.fillStyle='#1a2148';ctx.fillRect(x,floor-50,6,50);}
+      const tl=outside?trainX:(w/2-tw/2);
       ctx.fillStyle='#0d2a44';ctx.strokeStyle='#5fd6ff';ctx.lineWidth=2;
-      ctx.fillRect(tx,ty,tw,th);ctx.strokeRect(tx,ty,tw,th);
-      ctx.fillStyle='#0d2a44';ctx.beginPath();ctx.moveTo(tx+tw,ty);ctx.lineTo(tx+tw+38,ty+th/2);ctx.lineTo(tx+tw,ty+th);ctx.fill();
-      ctx.fillStyle=outside?'#0a1e30':'#050813';ctx.fillRect(tx+12,ty+12,tw-24,th-24);
-      // person
-      const cxp=tx+tw*0.38,fy=ty+th-14;
-      ctx.fillStyle='#ffd166';ctx.beginPath();ctx.arc(cxp,fy-26,8,0,7);ctx.fill();ctx.fillRect(cxp-6,fy-18,12,20);
-      // ball
-      if(ball){const yy=fy-30-( -260*ball.t+300*ball.t*ball.t )*-1; // up then down
-        const localY=fy-30-(260*ball.t-300*ball.t*ball.t)*1.0;
-        let xx=cxp,by=localY;
-        if(outside){const arc=(speed/3.6*7)*ball.t;xx=cxp+Math.min(tw*0.45,arc*0.0)+ (speed/3.6*1.6)*ball.t;
-          // show drift: ball carried forward with train
-          xx=cxp+ (px*0.20)*ball.t*10*0+ (speed/3.6*1.7)*ball.t;}
-        glow(ctx,xx,by,9,'rgba(124,255,178,.7)');ctx.fillStyle='#7CFFB2';ctx.beginPath();ctx.arc(xx,by,6,0,7);ctx.fill();
-        if(outside){ctx.strokeStyle='rgba(124,255,178,.35)';ctx.lineWidth=2;ctx.beginPath();
-          for(let s=0;s<=ball.t;s+=0.02){const ly=fy-30-(260*s-300*s*s);const lx=cxp+(speed/3.6*1.7)*s;
-            s===0?ctx.moveTo(lx,ly):ctx.lineTo(lx,ly);}ctx.stroke();}
-        else{ctx.strokeStyle='rgba(124,255,178,.3)';ctx.setLineDash([4,4]);ctx.beginPath();
-          ctx.moveTo(cxp,fy-30);ctx.lineTo(cxp,fy-30-80);ctx.stroke();ctx.setLineDash([]);}
-      }
-      return {tx,ty};
+      ctx.fillRect(tl,ty,tw,th);ctx.strokeRect(tl,ty,tw,th);
+      ctx.fillStyle='#0d2a44';ctx.beginPath();ctx.moveTo(tl+tw,ty);ctx.lineTo(tl+tw+32,ty+th/2);ctx.lineTo(tl+tw,ty+th);ctx.fill();
+      ctx.fillStyle='#050813';ctx.fillRect(tl+12,ty+12,tw-24,th-24);
+      const hx=tl+tw*0.4,handY=ty+th-26;
+      ctx.fillStyle='#ffd166';ctx.beginPath();ctx.arc(hx,handY-12,8,0,7);ctx.fill();ctx.fillRect(hx-6,handY-4,12,18);
+      const bx=hx,by=handY-18-hgt;
+      const trail=outside?trailOut:trailIn;
+      if(active){trail.push({x:bx,y:by});if(trail.length>240)trail.shift();}
+      if(trail.length>1){ctx.strokeStyle='rgba(124,255,178,.55)';ctx.lineWidth=2;ctx.beginPath();
+        trail.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke();}
+      if(active){glow(ctx,bx,by,10,'rgba(124,255,178,.85)');ctx.fillStyle='#eafff3';ctx.beginPath();ctx.arc(bx,by,6,0,7);ctx.fill();}
     }
-    const a=drawScene(0,halfH,true);
-    const b=drawScene(halfH,halfH,false);
+    scene(0,true);scene(sh,false);
     ctx.fillStyle='#5fd6ff';ctx.font='bold 13px sans-serif';
-    ctx.fillText('🌍 外（地上）の視点：山なりの放物線',12,20);
-    ctx.fillText('🚆 車内の視点：まっすぐ真上→真下',12,halfH+20);
-    stats.set('v','速さ',speed+' km/h');stats.set('rel','車内の物理','地上と同一');
-    rd(n,speed===0?'止まっている：どちらの視点でもボールは真上→真下':
-      `走行中でも車内では真上→真下に落ちる。外から見ると前進しながら放物線――同じ現象が視点で違って見える`);
+    ctx.fillText('🌍 外（地上）の視点：電車ごと動く → ボールは放物線',12,20);
+    ctx.fillText('🚆 車内の視点：電車は止まって見える → 真上→真下',12,sh+20);
+    stats.set('v','速さ',speed+' km/h');
+    stats.set('out','地上から見ると',speed===0?'真上→真下':'放物線');
+    stats.set('in','車内から見ると','真上→真下');
+    rd(n,speed===0?'止まっていれば、地上でも車内でもボールは真上→真下（同じ）':
+      '同じ1回の投げ上げでも、地上では放物線・車内では真上真下。どちらの世界でも物理法則は同じ＝ガリレイの相対性');
   });
 };
 
