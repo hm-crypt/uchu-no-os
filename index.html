@@ -151,7 +151,7 @@ const CH=[
  quote:"自然は、単純さを好む。",
  key:"重力の下で物を投げると、その軌道は<b>2次関数（放物線）y=ax²+bx</b>。速く投げると放物線が一周して<b>軌道</b>になる――落ちるリンゴと回る月は、同じ重力だ。",
  simTitle:"ニュートンの大砲：天体から打ち上げて軌道に乗せる",
- simHint:"天体を選び、発射スピード（円軌道=100%）と角度を決めて🚀発射。弱いと地表に落下（放物線）、約100%で人工衛星の軌道に、速すぎると脱出。白い点線＝予測の放物線で、左上の数式 y=ax²+bx そのもの（2次関数！）。天体（重力）を変えると係数 a が変わる。"},
+ simHint:"天体を選び、発射スピード（地球の周回速度=100%）と角度を決めて🚀発射。同じ100%でも、重力の弱い月では飛び出し（脱出）、地球では軌道に、木星ではすぐ落下――重力の違いがはっきり分かる。白い点線＝予測の放物線で、左上の数式 y=ax²+bx そのもの。係数 a は重力 g に比例して天体ごとに変わる（数学と物理のつながり！）。"},
 
 {n:2,t:"ルネサンスの万能天才：ダ・ヴィンチと解剖学",who:"レオナルド・ダ・ヴィンチ",role:"観察の先駆者",sim:"davinci",
  lead:"すべての発見は「よく見ること」から始まる。",
@@ -462,57 +462,62 @@ const SIMS={};
 /* ---- 第1章：重力（軌道力学＋的当て） ---- */
 SIMS.gravity=function(wrap,n){
   const {cv,ctx}=makeStage(wrap);const ctrl=controls(wrap);const stats=statBar(wrap);
+  const BASE=300;
   const bodies=[
     {name:'🌙 月',g:0.17,col:'#cdd3e2',deep:'#6f7790'},
     {name:'🔴 火星',g:0.38,col:'#e0875f',deep:'#8a3a20'},
     {name:'🌍 地球',g:1.0,col:'#5aa6e6',deep:'#143f6c'},
     {name:'🟠 木星',g:2.4,col:'#e0b878',deep:'#94652b'}
   ];
-  let bodyIdx=2,pct=70,angle=0,proj=null;
+  let bodyIdx=2,pct=100,angle=0,proj=null;
   const bb=document.createElement('div');bb.style.cssText='display:flex;gap:6px;flex-wrap:wrap';const bbtns=[];
   bodies.forEach((b,i)=>{const btn=document.createElement('button');btn.className='btn ghost';btn.style.padding='6px 10px';btn.textContent=b.name;
     btn.onclick=()=>{bodyIdx=i;proj=null;bbtns.forEach(x=>x.classList.remove('sel'));btn.classList.add('sel');};
     bb.appendChild(btn);bbtns.push(btn);});
   ctrl.appendChild(bb);bbtns[bodyIdx].classList.add('sel');
-  slider(ctrl,'発射スピード（円軌道=100%）',0,175,70,1,v=>{pct=v;return v+' %';});
+  slider(ctrl,'発射スピード（地球の周回速度=100%）',0,180,100,1,v=>{pct=v;return v+' %';});
   slider(ctrl,'発射角度',0,80,0,1,v=>{angle=v;return v+'°';});
   button(ctrl,'🚀 発射',null,()=>{proj=launch();});
   button(ctrl,'クリア','ghost',()=>{proj=null;});
-  function geom(){const w=cv._w,h=cv._h,cx=w/2,cy=h*0.56,pr=Math.min(w,h)*0.19,lr=pr+12;
-    const gpx=bodies[bodyIdx].g*430,GM=gpx*pr*pr,vc=Math.sqrt(GM/lr);
-    return{w,h,cx,cy,pr,lr,GM,vc,gloc:GM/(lr*lr)};}
-  function launch(){const G=geom(),v=pct/100*G.vc,a=angle*Math.PI/180,Px=G.cx,Py=G.cy-G.lr;
-    return{x:Px,y:Py,vx:v*Math.cos(a),vy:-v*Math.sin(a),trail:[{x:Px,y:Py}],cum:0,prev:Math.atan2(Py-G.cy,Px-G.cx),result:null,frozen:false};}
+  function geom(){const w=cv._w,h=cv._h,cx=w/2,cy=h*0.57,pr=Math.min(w,h)*0.26,lr=pr+14;
+    const GM=bodies[bodyIdx].g*BASE*pr*pr;
+    const vcRef=Math.sqrt((1.0*BASE*pr*pr)/lr);   // 地球基準の周回速度（共通の物差し）
+    const vcBody=Math.sqrt(GM/lr);
+    return{w,h,cx,cy,pr,lr,GM,vcRef,vcBody,gloc:GM/(lr*lr)};}
+  function launch(){const G=geom(),v=pct/100*G.vcRef,a=angle*Math.PI/180,Px=G.cx,Py=G.cy-G.lr;
+    return{x:Px,y:Py,vx:v*Math.cos(a),vy:-v*Math.sin(a),trail:[{x:Px,y:Py}],cum:0,prev:Math.atan2(Py-G.cy,Px-G.cx),result:null,frozen:false,v0:v};}
   loop(n,(dt,t)=>{const G=geom(),w=G.w,h=G.h,cx=G.cx,cy=G.cy,pr=G.pr,lr=G.lr;
     ctx.fillStyle='#03040c';ctx.fillRect(0,0,w,h);
-    const cell=Math.min(w,h)/12;drawGrid(ctx,w,h,cell);
+    const cell=Math.min(w,h)/11;drawGrid(ctx,w,h,cell);
     const Px=cx,Py=cy-lr;
-    // 円軌道ガイド
-    ctx.strokeStyle='rgba(124,255,178,.18)';ctx.setLineDash([4,7]);ctx.beginPath();ctx.arc(cx,cy,lr,0,7);ctx.stroke();ctx.setLineDash([]);
-    // 天体
-    glow(ctx,cx,cy,pr*1.9,'rgba(120,170,255,.18)');
+    // 円軌道ガイド（この天体の周回軌道）
+    ctx.strokeStyle='rgba(124,255,178,.16)';ctx.setLineDash([4,7]);ctx.beginPath();ctx.arc(cx,cy,lr,0,7);ctx.stroke();ctx.setLineDash([]);
+    // 天体（大きめ）
+    glow(ctx,cx,cy,pr*1.7,'rgba(120,170,255,.18)');
     const b=bodies[bodyIdx];const pgr=ctx.createRadialGradient(cx-pr*.35,cy-pr*.35,2,cx,cy,pr);
     pgr.addColorStop(0,b.col);pgr.addColorStop(1,b.deep);ctx.fillStyle=pgr;ctx.beginPath();ctx.arc(cx,cy,pr,0,7);ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,.5)';ctx.font='12px sans-serif';ctx.textAlign='center';
+    ctx.fillText('重力 '+b.g+' G',cx,cy+5);ctx.textAlign='left';
     // 発射点を原点とした座標軸
-    ctx.strokeStyle='rgba(255,255,255,.35)';ctx.lineWidth=1;
+    ctx.strokeStyle='rgba(255,255,255,.4)';ctx.lineWidth=1;
     ctx.beginPath();ctx.moveTo(Px,Py);ctx.lineTo(Px+cell*4.5,Py);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(Px,Py);ctx.lineTo(Px,Py-cell*3);ctx.stroke();
-    ctx.fillStyle='rgba(255,255,255,.6)';ctx.font='11px sans-serif';
-    ctx.fillText('x',Px+cell*4.5+3,Py+4);ctx.fillText('y',Px-11,Py-cell*3-2);ctx.fillText('O',Px-13,Py+13);
-    // 放物線プレビュー（一様重力近似）＋ 係数
-    const v=pct/100*G.vc,a=angle*Math.PI/180,vx0=v*Math.cos(a),vy0=v*Math.sin(a);
+    ctx.beginPath();ctx.moveTo(Px,Py);ctx.lineTo(Px,Py-cell*2.6);ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,.65)';ctx.font='12px sans-serif';
+    ctx.fillText('x',Px+cell*4.5+3,Py+4);ctx.fillText('y',Px-12,Py-cell*2.6-2);ctx.fillText('O',Px-14,Py+14);
+    // 放物線プレビュー（一様重力近似）＋係数（天体ごとに変化）
+    const v=pct/100*G.vcRef,a=angle*Math.PI/180,vx0=v*Math.cos(a),vy0=v*Math.sin(a);
     let A=0,B=0;
     if(vx0>0.5){const k=G.gloc/(2*vx0*vx0);A=-k*cell;B=vy0/vx0;
-      ctx.strokeStyle='rgba(255,255,255,.5)';ctx.setLineDash([3,4]);ctx.lineWidth=1.5;ctx.beginPath();
+      ctx.strokeStyle='rgba(255,255,255,.55)';ctx.setLineDash([3,4]);ctx.lineWidth=1.5;ctx.beginPath();
       let started=false;
       for(let X=0;X<=w;X+=4){const Y=B*X-k*X*X;const sx=Px+X,sy=Py-Y;
         if(Math.hypot(sx-cx,sy-cy)<pr)break;if(sx>w||sy>h||sy<0)break;
         started?ctx.lineTo(sx,sy):ctx.moveTo(sx,sy);started=true;}
       ctx.stroke();ctx.setLineDash([]);}
     // 照準
-    {const al=28+pct*0.6;ctx.strokeStyle='#ffd166';ctx.lineWidth=3;ctx.beginPath();
+    {const al=30+pct*0.55;ctx.strokeStyle='#ffd166';ctx.lineWidth=3;ctx.beginPath();
       ctx.moveTo(Px,Py);ctx.lineTo(Px+Math.cos(a)*al,Py-Math.sin(a)*al);ctx.stroke();}
-    // 発射体シミュレーション（逆2乗の本物の重力）
+    // 発射体（逆2乗の本物の重力で計算）
     if(proj){
       if(!proj.frozen){const N=6,sd=dt/N;
         for(let s=0;s<N;s++){const dx=proj.x-cx,dy=proj.y-cy,r=Math.hypot(dx,dy);
@@ -523,29 +528,30 @@ SIMS.gravity=function(wrap,n){
           if(rr<=pr){proj.result='落下';proj.frozen=true;break;}
           if(!proj.result&&proj.cum>=2*Math.PI){proj.result='軌道';}
           if(E>=0&&rr>pr*1.3){proj.result='脱出';}
-          if(rr>Math.max(w,h)*1.1){proj.frozen=true;break;}}
+          if(rr>Math.max(w,h)*1.15){proj.frozen=true;break;}}
         proj.trail.push({x:proj.x,y:proj.y});if(proj.trail.length>900)proj.trail.shift();}
-      ctx.strokeStyle=proj.result==='軌道'?'rgba(124,255,178,.8)':proj.result==='脱出'?'rgba(255,209,102,.8)':'rgba(95,214,255,.8)';
-      ctx.lineWidth=2;ctx.beginPath();proj.trail.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke();
-      if(!proj.frozen||proj.result==='軌道'){glow(ctx,proj.x,proj.y,9,'rgba(234,255,243,.9)');
-        ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(proj.x,proj.y,5,0,7);ctx.fill();}
+      ctx.strokeStyle=proj.result==='軌道'?'rgba(124,255,178,.85)':proj.result==='脱出'?'rgba(255,209,102,.85)':'rgba(95,214,255,.85)';
+      ctx.lineWidth=2.5;ctx.beginPath();proj.trail.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke();
+      if(!proj.frozen||proj.result==='軌道'){glow(ctx,proj.x,proj.y,11,'rgba(234,255,243,.9)');
+        ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(proj.x,proj.y,6,0,7);ctx.fill();}
     }
     // 数式ボックス
-    const bw=Math.min(340,w*0.62);ctx.fillStyle='rgba(8,10,28,.82)';ctx.fillRect(10,10,bw,62);
+    const bw=Math.min(350,w*0.66);ctx.fillStyle='rgba(8,10,28,.85)';ctx.fillRect(10,10,bw,62);
     ctx.strokeStyle='#272d55';ctx.strokeRect(10,10,bw,62);
     let eq='y = '+A.toFixed(3)+' x²';if(Math.abs(B)>0.001)eq+=(B>0?' + ':' − ')+Math.abs(B).toFixed(2)+' x';
-    ctx.fillStyle='#ffd166';ctx.font='bold 18px monospace';ctx.fillText(eq,20,38);
-    ctx.fillStyle='#7CFFB2';ctx.font='12px sans-serif';ctx.fillText('← 軌道は 2次関数（放物線）！ a は重力で決まる',20,57);
+    ctx.fillStyle='#ffd166';ctx.font='bold 19px monospace';ctx.fillText(eq,20,38);
+    ctx.fillStyle='#7CFFB2';ctx.font='12px sans-serif';ctx.fillText('← 2次関数（放物線）。a は重力 g に比例（'+b.g+'G）',20,57);
     // 結果バナー
     if(proj&&proj.result){const msg=proj.result==='軌道'?'🛰 軌道に乗った！ 放物線が一周→楕円軌道（人工衛星）':
-      proj.result==='脱出'?'🚀 脱出速度を超えた！ 重力を振り切った':'💥 地表に落下（放物線）— もう少し速く！';
+      proj.result==='脱出'?'🚀 脱出！ 重力が弱く、振り切った':'💥 地表に落下（放物線）— 重力が強い／スピード不足';
       ctx.fillStyle=proj.result==='軌道'?'#7CFFB2':proj.result==='脱出'?'#ffd166':'#ff7eb6';
       ctx.font='bold 15px sans-serif';ctx.textAlign='center';ctx.fillText(msg,w/2,h-12);ctx.textAlign='left';}
-    stats.set('body','天体',bodies[bodyIdx].name);
-    stats.set('spd','発射',pct+' %（円速度比）');
+    const ratio=Math.round(pct*G.vcRef/G.vcBody);
+    stats.set('body','天体',b.name);
+    stats.set('g','重力',b.g+' G');
+    stats.set('ratio','この天体での周回比',ratio+' %',ratio>=95&&ratio<=141?'#7CFFB2':ratio>141?'#ffd166':'#ff7eb6');
     stats.set('res','結果',proj?(proj.result||'飛行中'):'—',proj&&proj.result==='軌道'?'#7CFFB2':'#ffd166');
-    rd(n,proj&&proj.result==='軌道'?'落ちるリンゴも回る人工衛星も同じ「重力」。投げる速さを上げると放物線が一周して軌道になる＝ニュートンの大発見':
-      '発射→重力で曲がる軌道は放物線（y=ax²+bx）。約100%で人工衛星の軌道に。天体を変えると重力が変わり、係数aも変わる');
+    rd(n,'同じ発射スピードでも、重力が弱い月では飛び出し（脱出）、地球では軌道、木星では落下――重力の違いがそのまま結果と数式の係数 a に表れる');
   });
 };
 
